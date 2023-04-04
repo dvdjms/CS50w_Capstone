@@ -20,6 +20,7 @@ from rest_framework_simplejwt import views as jwt_views
 from api.views import CreateUserView
 
 
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('api.urls')),

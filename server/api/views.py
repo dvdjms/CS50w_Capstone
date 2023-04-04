@@ -9,6 +9,10 @@ from rest_framework import generics
 from .serializers import PersonSerializer, UserSerializer
 from .models import Person
 from django.contrib.auth.models import User
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+import json
+import requests
 
 
 class CreateUserView(generics.CreateAPIView):
@@ -43,12 +47,15 @@ class LogoutView(APIView):
             return Response(status=status.HTTP_400_BAD_REQUEST)
         
 
-# class RegisterView(APIView):
-#     def post(self, request):
-#         content = {'message': 'Registered!'}
-#         return Response(content)
-
-
+@csrf_exempt
+def wikipedia(request):
+    title = json.loads(request.body)
+    response = requests.get('https://en.wikipedia.org/api/rest_v1/page/summary/' + title['search'])
+    wikiSummary = response.json()
+    return JsonResponse({
+        'summary': wikiSummary['extract'],
+        'image' : wikiSummary['thumbnail']['source']
+    })
 
 
 
