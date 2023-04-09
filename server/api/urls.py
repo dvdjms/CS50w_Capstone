@@ -10,6 +10,7 @@ urlpatterns = [
     # path('register/', views.RegisterView.as_view(), name ='register'),
     path('api/users/', views.CreateUserView.as_view(), name='create_user'),
     path('wiki', views.wikipedia, name="wiki"), 
+    path('weather', views.openWeather, name="weather"), 
 ]
 
 

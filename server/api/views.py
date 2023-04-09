@@ -57,6 +57,19 @@ def wikipedia(request):
         'image' : wikiSummary['thumbnail']['source']
     })
 
+def openWeather(request):
+        location = "edinburgh"
+        response = requests.get('https://api.openweathermap.org/data/2.5/weather?q=' + location + '&APPID=03f368dbb853b09836b1ab06b911628b')
+        openweather = response.json()
+        return JsonResponse({
+            'city': openweather['name'],
+            'temperature': round(openweather['main']['temp'] - 273.15),
+            'feelslike': round(openweather['main']['feels_like'] - 273.15),
+            'description': openweather['weather'][0]['description'],
+            'windspeed': openweather['wind']['speed'],
+            'pressure': openweather['main']['pressure'],
+            'humidity': openweather['main']['humidity']
+        })
 
 
 
