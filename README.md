@@ -94,7 +94,6 @@ npm install
 ```
 npm styled-components
 ```
-
 Prepare the client build folder: 
 ```
 npm run build

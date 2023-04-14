@@ -1,19 +1,14 @@
 from django.contrib import admin
 
 # Register your models here.
-from .models import Person
-
-# class UserAdmin(admin.ModelAdmin):
-#     list_display = ('username', 'email')
-
-class PersonAdmin(admin.ModelAdmin):
-    list_display = ('id', 'name', 'email')
+from .models import City
 
 
-# class UserAdmin(admin.ModelAdmin):
-#     list_display = ('id', 'username', 'first_name', 'last_name', 'email', 'password')
+class CityAdmin(admin.ModelAdmin):
+    list_display = ('city_ascii', 'lat', 'lng', 'country', 'admin_name', 'population')
+
 
 
 
 # admin.site.register(User, UserAdmin)
-admin.site.register(Person, PersonAdmin)
+admin.site.register(City, CityAdmin)

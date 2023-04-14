@@ -1,11 +1,11 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
-from .models import Person
+from .models import City
 
-class PersonSerializer(serializers.ModelSerializer):
+class CitySerializer(serializers.ModelSerializer):
     class Meta:
-        model = Person
-        fields = ('id', 'name', 'email')
+        model = City
+        fields = ('id', 'city', 'city_ascii', 'lat', 'lng', 'country', 'iso2', 'iso3', 'admin_name', 'population', 'cityid')
 
 
 class UserSerializer(serializers.ModelSerializer):

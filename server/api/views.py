@@ -6,8 +6,8 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework import status
 
 from rest_framework import generics
-from .serializers import PersonSerializer, UserSerializer
-from .models import Person
+from .serializers import CitySerializer, UserSerializer
+from .models import City
 from django.contrib.auth.models import User
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
@@ -20,18 +20,21 @@ class CreateUserView(generics.CreateAPIView):
     queryset = User.objects.all()
 
 
+# Create your views here.
+class CityView(generics.ListAPIView):
+    serializer_class = CitySerializer
+    def get_queryset(self):
+        searchField = self.kwargs.get("city_ascii", "")
+        # print('search...', searchField)
+        city_data = City.objects.filter(city_ascii__istartswith=searchField)
+        return city_data[:7]
 
-# # Create your views here.
-# class PersonView(generics.CreateAPIView):
-class PersonView(generics.ListAPIView):
-    queryset = Person.objects.all()
-    serializer_class = PersonSerializer
 
-
+# I don't think this is doing much... see app.js regarding token
 class HomeView(APIView):
     permission_classes = (IsAuthenticated,)
     def get(self, request):
-        content = {'message': 'Welcome to the JWT Authentication page using React Js and Django!'}
+        content = {'message': 'Welcome to the JWT Authentication page!'}
         return Response(content)
 
 
@@ -57,19 +60,28 @@ def wikipedia(request):
         'image' : wikiSummary['thumbnail']['source']
     })
 
-def openWeather(request):
-        location = "edinburgh"
-        response = requests.get('https://api.openweathermap.org/data/2.5/weather?q=' + location + '&APPID=03f368dbb853b09836b1ab06b911628b')
-        openweather = response.json()
-        return JsonResponse({
-            'city': openweather['name'],
-            'temperature': round(openweather['main']['temp'] - 273.15),
-            'feelslike': round(openweather['main']['feels_like'] - 273.15),
-            'description': openweather['weather'][0]['description'],
-            'windspeed': openweather['wind']['speed'],
-            'pressure': openweather['main']['pressure'],
-            'humidity': openweather['main']['humidity']
-        })
+
+@csrf_exempt
+def Weather(request):
+    headers = {
+        'User-Agent': 'https://github.com/dvdjms/CS50w_Capstone'
+    }
+    data = json.loads(request.body)
+    latitude = str(data['latitude'])
+    longitude = str(data['longitude'])
+    response = requests.get('https://api.met.no/weatherapi/locationforecast/2.0/compact?lat=' + latitude + '&lon=' + longitude, headers=headers)
+    weather = response.json()
+ 
+    return JsonResponse({
+        'temperature': weather['properties']['timeseries'][0]['data']['instant']['details']['air_temperature'],
+        'rain':  weather['properties']['timeseries'][0]['data']['next_1_hours']['details']['precipitation_amount'],
+        'summary': weather['properties']['timeseries'][0]['data']['next_1_hours']['summary']['symbol_code'],
+        'wind': weather['properties']['timeseries'][0]['data']['instant']['details']['wind_speed'],
+        'pressure': weather['properties']['timeseries'][0]['data']['instant']['details']['air_pressure_at_sea_level'],
+        'humidity': weather['properties']['timeseries'][0]['data']['instant']['details']['relative_humidity']
+    })
+
+
 
 
 
