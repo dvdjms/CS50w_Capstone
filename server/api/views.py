@@ -4,6 +4,8 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework import status
+from datetime import datetime, timedelta
+
 
 from rest_framework import generics
 from .serializers import CitySerializer, UserSerializer
@@ -27,7 +29,7 @@ class CityView(generics.ListAPIView):
         searchField = self.kwargs.get("city_ascii", "")
         # print('search...', searchField)
         city_data = City.objects.filter(city_ascii__istartswith=searchField)
-        return city_data[:7]
+        return city_data[:17]
 
 
 # I don't think this is doing much... see app.js regarding token
@@ -55,6 +57,8 @@ def wikipedia(request):
     title = json.loads(request.body)
     response = requests.get('https://en.wikipedia.org/api/rest_v1/page/summary/' + title['search'])
     wikiSummary = response.json()
+    if wikiSummary['title'] == 'Not found.':
+        return JsonResponse({'summary': 'Search not listed'})
     return JsonResponse({
         'summary': wikiSummary['extract'],
         'image' : wikiSummary['thumbnail']['source']
@@ -71,8 +75,22 @@ def Weather(request):
     longitude = str(data['longitude'])
     response = requests.get('https://api.met.no/weatherapi/locationforecast/2.0/compact?lat=' + latitude + '&lon=' + longitude, headers=headers)
     weather = response.json()
+
+
+    timeseries = weather['properties'].get('timeseries', [])
+    twentyfourData = []
+    temp = {}
+    for i in range(24):
+        data = timeseries[i].get('data')
+        time = timeseries[i].get('time')
+        temp = {'time': time}
+        twentyfourData.append(data)
+        data.update(temp)
+
  
     return JsonResponse({
+        'OneDay': {'twentyfourData' : twentyfourData},
+        'time': weather['properties']['timeseries'][0]['time'],
         'temperature': weather['properties']['timeseries'][0]['data']['instant']['details']['air_temperature'],
         'rain':  weather['properties']['timeseries'][0]['data']['next_1_hours']['details']['precipitation_amount'],
         'summary': weather['properties']['timeseries'][0]['data']['next_1_hours']['summary']['symbol_code'],
