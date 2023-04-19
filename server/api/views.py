@@ -73,30 +73,44 @@ def Weather(request):
     data = json.loads(request.body)
     latitude = str(data['latitude'])
     longitude = str(data['longitude'])
-    response = requests.get('https://api.met.no/weatherapi/locationforecast/2.0/compact?lat=' + latitude + '&lon=' + longitude, headers=headers)
+    response = requests.get('https://api.met.no/weatherapi/locationforecast/2.0/complete?lat=' + latitude + '&lon=' + longitude, headers=headers)
     weather = response.json()
 
-
     timeseries = weather['properties'].get('timeseries', [])
-    twentyfourData = []
+    
+    twentyfour_hour_data = []
     temp = {}
     for i in range(24):
         data = timeseries[i].get('data')
         time = timeseries[i].get('time')
         temp = {'time': time}
-        twentyfourData.append(data)
+        twentyfour_hour_data.append(data)
         data.update(temp)
 
- 
+    ten_day_data = []
+    temp_ = {}
+    for i in range(25, len(timeseries)):
+        data = timeseries[i].get('data')
+        time = timeseries[i].get('time')
+        temp_ = {'time': time}
+        ten_day_data.append(data)
+        data.update(temp_)
+
+    # temperature = twentyfour_hour_data[0]['instant']['details']['air_temperature']
+    # wind = twentyfour_hour_data[0]['instant']['details']['wind_speed']
+    # pressure = twentyfour_hour_data[0]['instant']['details']['air_pressure_at_sea_level']
+    # humidity = twentyfour_hour_data[0]['instant']['details']['relative_humidity']
+    # symbol1 = twentyfour_hour_data[0]['next_1_hours']['summary']['symbol_code']
+    # symbol2 = twentyfour_hour_data[0]['next_6_hours']['summary']['symbol_code']
+    # symbol3 = twentyfour_hour_data[0]['next_12_hours']['summary']['symbol_code']
+    # rain1 = twentyfour_hour_data[0]['next_1_hours']['details']['precipitation_amount']
+    # rain2 = twentyfour_hour_data[0]['next_6_hours']['details']['precipitation_amount']
+    # instantWeather = [temperature, wind, pressure, humidity, symbol1, symbol2, symbol3, rain1, rain2]
+
     return JsonResponse({
-        'OneDay': {'twentyfourData' : twentyfourData},
-        'time': weather['properties']['timeseries'][0]['time'],
-        'temperature': weather['properties']['timeseries'][0]['data']['instant']['details']['air_temperature'],
-        'rain':  weather['properties']['timeseries'][0]['data']['next_1_hours']['details']['precipitation_amount'],
-        'summary': weather['properties']['timeseries'][0]['data']['next_1_hours']['summary']['symbol_code'],
-        'wind': weather['properties']['timeseries'][0]['data']['instant']['details']['wind_speed'],
-        'pressure': weather['properties']['timeseries'][0]['data']['instant']['details']['air_pressure_at_sea_level'],
-        'humidity': weather['properties']['timeseries'][0]['data']['instant']['details']['relative_humidity']
+        'oneDay': {'twentyfourData' : twentyfour_hour_data},
+        'tenDay': {'tenDayData': ten_day_data},
+        # 'instantWeather': instantWeather
     })
 
 
