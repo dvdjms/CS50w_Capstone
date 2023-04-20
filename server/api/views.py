@@ -110,7 +110,6 @@ def Weather(request):
     return JsonResponse({
         'oneDay': {'twentyfourData' : twentyfour_hour_data},
         'tenDay': {'tenDayData': ten_day_data},
-        # 'instantWeather': instantWeather
     })
 
 
