@@ -67,17 +67,22 @@ def wikipedia(request):
 
 @csrf_exempt
 def Weather(request):
-    headers = {
-        'User-Agent': 'https://github.com/dvdjms/CS50w_Capstone'
-    }
     data = json.loads(request.body)
     latitude = str(data['latitude'])
     longitude = str(data['longitude'])
-    response = requests.get('https://api.met.no/weatherapi/locationforecast/2.0/complete?lat=' + latitude + '&lon=' + longitude, headers=headers)
-    weather = response.json()
 
-    timeseries = weather['properties'].get('timeseries', [])
-    
+    # OpenWeather Api for todays weather
+    response1 = requests.get('https://api.openweathermap.org/data/2.5/weather?lat=' + latitude + '&lon=' + longitude + '&appid=03f368dbb853b09836b1ab06b911628b')
+    openWeather = response1.json()
+
+    # Norway Met Api for future weather and weather symbols
+    headers = {
+        'User-Agent': 'https://github.com/dvdjms/CS50w_Capstone'
+    }
+    response2 = requests.get('https://api.met.no/weatherapi/locationforecast/2.0/complete?lat=' + latitude + '&lon=' + longitude, headers=headers)
+    weather2 = response2.json()
+    timeseries = weather2['properties'].get('timeseries', [])
+
     twentyfour_hour_data = []
     temp = {}
     for i in range(24):
@@ -96,20 +101,10 @@ def Weather(request):
         ten_day_data.append(data)
         data.update(temp_)
 
-    # temperature = twentyfour_hour_data[0]['instant']['details']['air_temperature']
-    # wind = twentyfour_hour_data[0]['instant']['details']['wind_speed']
-    # pressure = twentyfour_hour_data[0]['instant']['details']['air_pressure_at_sea_level']
-    # humidity = twentyfour_hour_data[0]['instant']['details']['relative_humidity']
-    # symbol1 = twentyfour_hour_data[0]['next_1_hours']['summary']['symbol_code']
-    # symbol2 = twentyfour_hour_data[0]['next_6_hours']['summary']['symbol_code']
-    # symbol3 = twentyfour_hour_data[0]['next_12_hours']['summary']['symbol_code']
-    # rain1 = twentyfour_hour_data[0]['next_1_hours']['details']['precipitation_amount']
-    # rain2 = twentyfour_hour_data[0]['next_6_hours']['details']['precipitation_amount']
-    # instantWeather = [temperature, wind, pressure, humidity, symbol1, symbol2, symbol3, rain1, rain2]
-
     return JsonResponse({
         'oneDay': {'twentyfourData' : twentyfour_hour_data},
         'tenDay': {'tenDayData': ten_day_data},
+        'openWeather': {'openWeather' : openWeather}
     })
 
 
