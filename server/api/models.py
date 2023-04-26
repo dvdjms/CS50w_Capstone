@@ -14,3 +14,12 @@ class City(models.Model):
     admin_name = models.CharField(max_length=32, blank=False)
     population = models.IntegerField(default=0, null=False)
     cityid = models.IntegerField(default=0, null=False)
+
+
+class Favourite(models.Model):
+    username = models.CharField(max_length=32, blank=False)
+    city_ascii = models.CharField(max_length=32, blank=False)
+    lat = models.FloatField(blank=False)
+    lng = models.FloatField(blank=False)
+    timezone = models.IntegerField(default=0, null=False)
+    cityid = models.IntegerField(default=0, null=False)

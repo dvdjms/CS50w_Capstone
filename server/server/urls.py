@@ -17,23 +17,18 @@ from django.contrib import admin
 from django.urls import include, path
 from core.views import client
 from rest_framework_simplejwt import views as jwt_views
-from api.views import CreateUserView, CityView
-
+from api.views import CreateUserView, CitySearchView, FavouriteView
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('api.urls')),
 
-    # path('', client, name="home"),
-    # path('register/', client, name="register"),
-    # path('login/', client, name="login"),
-    # path('logout/', client, name="logout"),
-
     path('token/', jwt_views.TokenObtainPairView.as_view(), name ='token_obtain_pair'),
     path('token/refresh/', jwt_views.TokenRefreshView.as_view(), name ='token_refresh'),
     path('api/users', CreateUserView.as_view(), name = 'user_registration'),
-    path('api/cities/', CityView.as_view(), name = 'cities'),
+    path('api/cities/', CitySearchView.as_view(), name = 'cities'),
+    path('api/favourites/', FavouriteView.as_view(), name = 'favourites'),
 ]
 
 

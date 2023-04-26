@@ -1,11 +1,17 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
-from .models import City
+from .models import City, Favourite
 
 class CitySerializer(serializers.ModelSerializer):
     class Meta:
         model = City
         fields = ('id', 'city', 'city_ascii', 'lat', 'lng', 'country', 'iso2', 'iso3', 'admin_name', 'population', 'cityid')
+
+
+class FavouriteSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Favourite
+        fields = ['id', 'username', 'city_ascii', 'lat', 'lng', 'timezone', 'cityid']
 
 
 class UserSerializer(serializers.ModelSerializer):

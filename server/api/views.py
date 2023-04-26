@@ -4,17 +4,15 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework import status
-from datetime import datetime, timedelta
-
-
 from rest_framework import generics
-from .serializers import CitySerializer, UserSerializer
-from .models import City
+from .serializers import CitySerializer, UserSerializer, FavouriteSerializer
+from .models import City, Favourite
 from django.contrib.auth.models import User
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
 import requests
+import sys
 
 
 class CreateUserView(generics.CreateAPIView):
@@ -23,13 +21,59 @@ class CreateUserView(generics.CreateAPIView):
 
 
 # Create your views here.
-class CityView(generics.ListAPIView):
+class CitySearchView(generics.ListAPIView):
     serializer_class = CitySerializer
     def get_queryset(self):
         searchField = self.kwargs.get("city_ascii", "")
-        # print('search...', searchField)
         city_data = City.objects.filter(city_ascii__istartswith=searchField)
         return city_data[:17]
+        
+class CityFavouritesView(generics.ListAPIView):
+    serializer_class = CitySerializer
+    def get_queryset(self):
+        searchField1 = self.kwargs.get("cityid", "")
+        city_data = City.objects.filter(cityid__exact=searchField1)
+        # print('citydata', city_data)
+        return city_data
+
+
+# class CityViewq(generics.ListAPIView):
+#     serializer_class = CitySerializer
+#     def get_queryset(self):
+#         searchField = self.kwargs.get("cityid", "")
+#         city_data = City.objects.filter(cityid__iexact=searchField)
+#         return city_data
+
+
+class FavouriteView(generics.ListAPIView, generics.DestroyAPIView, generics.CreateAPIView):
+    serializer_class = FavouriteSerializer
+
+    def get_queryset(self):
+        favourites = Favourite.objects.filter(username=self.request.user)
+        return favourites
+    
+    def post(self, request):
+        user_name = self.request.user
+ 
+        city_id = request.data.get('cityid')
+        new_instance = {
+            'username': user_name.username, 
+            'city_ascii': request.data.get('city_ascii'),
+            'lat': request.data.get('latitude'),
+            'lng': request.data.get('longitude'),
+            'timezone': request.data.get('timezone'),
+            'cityid': city_id
+            }
+        try:
+            favourite = Favourite.objects.get(cityid=city_id, username=user_name.username)
+            favourite.delete()
+            return Response({'message': 'City deleted successfully'})
+        except Favourite.DoesNotExist:
+            serializer = FavouriteSerializer(data=new_instance)
+            if serializer.is_valid():
+                serializer.save()
+                return Response({'message': 'City added successfully'})
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 # I don't think this is doing much... see app.js regarding token
@@ -70,11 +114,9 @@ def Weather(request):
     data = json.loads(request.body)
     latitude = str(data['latitude'])
     longitude = str(data['longitude'])
-
     # OpenWeather Api for todays weather
     response1 = requests.get('https://api.openweathermap.org/data/2.5/weather?lat=' + latitude + '&lon=' + longitude + '&appid=03f368dbb853b09836b1ab06b911628b')
     openWeather = response1.json()
-
     # Norway Met Api for future weather and weather symbols
     headers = {
         'User-Agent': 'https://github.com/dvdjms/CS50w_Capstone'
@@ -109,8 +151,16 @@ def Weather(request):
 
 
 
+# def Favourites():
+    
+#     body1 = {body: {'latitude': 55.55, 'longitude': 55.55}}
+
+#     newdata = Weather(body1)
+#     print(newdata)
+#     return newdata
 
 
+# Favourites()
 
 
 # from datetime import datetime
