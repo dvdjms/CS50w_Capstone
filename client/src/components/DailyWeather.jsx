@@ -1,10 +1,12 @@
 import styled from 'styled-components';
-
+import { GetLocalDay } from '../components/helpers.js';
 
 const DailyWeather = (props) => {
 
 
       const oneDayData = props.oneDayData;
+      // const tenDayData = props.TenDayData;
+      const timezone = props.openWeather.timezone;
 
       const temperatureMax1 = parseInt(oneDayData.length > 0 ? oneDayData[0].instant.details.air_temperature : null);
       // const temperatureMin1 = parseInt(oneDayData.length > 0 ? oneDayData[0].next_6_hours.details.air_temperature_min : null);
@@ -18,8 +20,10 @@ const DailyWeather = (props) => {
       const time1 = oneDayData.length > 0 ? oneDayData[5].time.substr(11, 5) : null;
       const time2 = oneDayData.length > 0 ? oneDayData[11].time.substr(11, 5) : null;
       const time3 = oneDayData.length > 0 ? oneDayData[17].time.substr(11, 5) : null;
-      // oneDayData.time.substr(11, 5)}
+      const day = oneDayData.length > 0 ? oneDayData[0].time : null;
+      
 
+      
 
       return (
             <>
@@ -27,20 +31,16 @@ const DailyWeather = (props) => {
                   <DateContainer>
                         <UL>
                         <Day>Today</Day>
-                        <Day>Tue</Day>
-                              {/* {Array.from(tenDayData).map((tenDayData, index) => {
-                                    return <List key={index}>
-                                                <ChartContainer>
-                                                      <WeatherChart><Data>{tenDayData.instant.details.temperature} &deg;C</Data><Span>Temperature</Span></WeatherChart>
-                                                      {/* <WeatherChart><Data>{rain} mm</Data><Span>Rain</Span></WeatherChart>
-                                                      <WeatherChart><Data>{summary}</Data><Span>Weather</Span></WeatherChart>
-                                                      <WeatherChart><Data>{wind} m/s</Data><Span>Wind</Span></WeatherChart>
-                                                      <WeatherChart><Data>{pressure} hPa</Data><Span>Pressure</Span></WeatherChart>
-                                                      <WeatherChart><Data>{humidity} %</Data><Span>Humidity</Span></WeatherChart>
-                                                 </ChartContainer>
-                                           </List>
-                              })}*/}
-                        </UL> 
+                        {/* <Day>{GetLocalDay(day, timezone)}</Day> */}
+                        <Day>{GetLocalDay(day, timezone + 86400)}</Day>
+                        <Day>{GetLocalDay(day, timezone + 172800)}</Day>
+                        <Day>{GetLocalDay(day, timezone + 259200)}</Day>
+                        <Day>{GetLocalDay(day, timezone + 345600)}</Day>
+                        <Day>{GetLocalDay(day, timezone + 86400)}</Day>
+                        <Day>{GetLocalDay(day, timezone + 86400)}</Day>
+                        <Day>{GetLocalDay(day, timezone + 86400)}</Day>
+                        <Day>{GetLocalDay(day, timezone + 86400)}</Day>
+                        </UL>
                   </DateContainer>
 
     
@@ -73,9 +73,8 @@ const DailyWeather = (props) => {
 const Paragraph = styled.p`
       font-size: 12px;
       margin: 0px;
-      padding: 0 0 2px 7px;
+      padding: 3px 0 3px 7px;
 `;
-
 
 const SpanTime = styled.span`
       float: left;
@@ -95,11 +94,11 @@ const Span = styled.span`
 const WeatherIconOuterContainer = styled.div`
       display: grid;
       gap: 10px;
-      width: 100%;
+      width: 98.7%;
       grid-template-columns: repeat(4, 1fr);
       grid-template-rows: auto;
       justify-content: center;
-      padding: 7px 14px 7px 7px;
+      padding: 7px 7px 7px 7px;
       @media (max-width: 568px) {
             grid-template-columns: repeat(2, 1fr);
             grid-template-rows: auto;
@@ -126,7 +125,6 @@ const WeatherIcon = styled.img`
       margin: 5px 0 0 10px;
 `;
 
-
 const DateContainer = styled.div`
       display: flex;
       justify-content: space-between;
@@ -148,7 +146,6 @@ const Day = styled.li`
     }
 `;
 
-
 const UL = styled.ul`
       list-style: none;
       padding: 0 0 0 5px;
@@ -161,7 +158,5 @@ const UL = styled.ul`
       }
 `;
 
+
 export default DailyWeather;
-
-
-

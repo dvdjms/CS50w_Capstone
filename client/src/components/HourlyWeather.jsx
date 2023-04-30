@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { GetLocalHours } from '../components/helpers.js';
 
 
 const HourlyWeather = (props) => {
@@ -10,7 +11,7 @@ const HourlyWeather = (props) => {
                   <UL>
                         {Array.from(props.oneDayData).map((oneDayData, index) => { 
                               return <List key={index}>
-                                          <SpanHourly>{parseInt(oneDayData.time.substr(11, 4))}</SpanHourly>
+                                          <SpanHourly>{GetLocalHours(oneDayData.time, props.openWeather.timezone)}</SpanHourly>
                                           <WeatherIconHourly 
                                                 alt={oneDayData.next_6_hours.summary.symbol_code} 
                                                 src={`/weathericons/${oneDayData.next_1_hours.summary.symbol_code}.svg`}
@@ -26,14 +27,16 @@ const HourlyWeather = (props) => {
 
 const HourlyContainer = styled.section`
       height: 120px;
-      padding-right: 9px;
-
+      padding-right: 2px;
+      margin-right: 7px;
+      border-top: #faf1cf solid;
+      border-bottom: #faf1cf solid;
 `;
 
 const Paragraph = styled.p`
       font-size: 12px;
       margin: 0px;
-      padding: 0 0 2px 7px;
+      padding: 3px 0 3px 7px;
 `;
 
 const UL = styled.ul`
@@ -50,7 +53,7 @@ const UL = styled.ul`
 
 const List = styled.li`
       float: left;
-      border: #ffef3c solid;
+      border: #e6a84a solid;
       border-radius: 10px;
       height: 78px;
       padding: 4px 0 0 0;

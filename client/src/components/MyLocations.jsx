@@ -9,10 +9,9 @@ const MyLocations = (props) => {
       const time_now = String(moment.now());
       const timeNow = parseInt(time_now.slice(0,10));
 
-
       return (
             <>
-            {/* {props.favouritesResults < 1 ? <></> : */}
+            {props.favouritesResults < 1 ? <MyLocationsContainer><H4>My Locations</H4></MyLocationsContainer> :
             <MyLocationsContainer>
                   {Array.isArray(props.favouritesResults) && props.favouritesResults.map((favouritesResults, index) => { 
                   return <Location onClick={event => props.handleClick(favouritesResults.cityid)} key={index}>
@@ -20,11 +19,10 @@ const MyLocations = (props) => {
                               <WeatherIcon alt={favouritesResults.symbol} src={`/weathericons/${favouritesResults.symbol}.svg`}></WeatherIcon>
                               <Temperature>{favouritesResults.temperature}&deg;</Temperature>
                               <Time>{ConvertTime(timeNow, favouritesResults.timezone)}</Time>
-                              <span>{}</span>
                         </Location>
                  })} 
             </MyLocationsContainer>
-            {/* } */}
+            }
             </>
       );
 };
@@ -47,14 +45,15 @@ const WeatherIcon = styled.img`
 `;
 
 const Temperature = styled.span`
+      align-items: center;
+      display: flex;
       float: right;
       font-size: 16px;
       font-weight: 600;
-      width: 40%;
       height: 50%;
-      display: flex;
       justify-content: center;
-      align-items: center;
+      padding-bottom: 8px;
+      width: 40%;
 `;
 
 const Time = styled.span`
@@ -97,6 +96,13 @@ const MyLocationsContainer = styled.div`
       }
       display: flex;
       gap: 5px;
+`;
+
+const H4 = styled.h1`
+      margin: auto;
+      color: #f8bfe7;
+      font-family: 'Lucida Sans', 'Lucida Sans Regular', Verdana, sans-serif;
+      font-weight: 800;
 `;
 
 

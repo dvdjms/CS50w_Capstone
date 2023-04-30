@@ -1,4 +1,4 @@
-# from django.shortcuts import render
+
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
@@ -12,7 +12,6 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
 import requests
-import sys
 
 
 class CreateUserView(generics.CreateAPIView):
@@ -20,31 +19,25 @@ class CreateUserView(generics.CreateAPIView):
     queryset = User.objects.all()
 
 
-# Create your views here.
+# Returns top 17 city objects based on user (search) input 
 class CitySearchView(generics.ListAPIView):
     serializer_class = CitySerializer
     def get_queryset(self):
         searchField = self.kwargs.get("city_ascii", "")
         city_data = City.objects.filter(city_ascii__istartswith=searchField)
         return city_data[:17]
+    
         
+# Returns single city object based on favourites click
 class CityFavouritesView(generics.ListAPIView):
     serializer_class = CitySerializer
     def get_queryset(self):
-        searchField1 = self.kwargs.get("cityid", "")
-        city_data = City.objects.filter(cityid__exact=searchField1)
-        # print('citydata', city_data)
+        cityID = self.kwargs.get("cityid", "")
+        city_data = City.objects.filter(cityid__exact=cityID)
         return city_data
 
 
-# class CityViewq(generics.ListAPIView):
-#     serializer_class = CitySerializer
-#     def get_queryset(self):
-#         searchField = self.kwargs.get("cityid", "")
-#         city_data = City.objects.filter(cityid__iexact=searchField)
-#         return city_data
-
-
+# Adds or deletes cities from Favourites
 class FavouriteView(generics.ListAPIView, generics.DestroyAPIView, generics.CreateAPIView):
     serializer_class = FavouriteSerializer
 
@@ -54,7 +47,6 @@ class FavouriteView(generics.ListAPIView, generics.DestroyAPIView, generics.Crea
     
     def post(self, request):
         user_name = self.request.user
- 
         city_id = request.data.get('cityid')
         new_instance = {
             'username': user_name.username, 

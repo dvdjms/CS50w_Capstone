@@ -4,7 +4,7 @@ import Wiki from "../components/Wiki";
 import Weather from '../components/Weather';
 import Search from '../components/Search';
 import MyLocations from '../components/MyLocations';
-import { FetchFavourites, GetLocalTime } from '../components/helpers.js';
+import { favouritesWeather, GetLocalTime } from '../components/helpers.js';
 
 // * Times are UTC+0:00 / Cities data from simplemaps.com / Weather data from Meteorologisk Institutt, Norway
 
@@ -60,14 +60,12 @@ const Home = () => {
             }
       };
 
-      // this searches through the 17 cities only!!!
-      // needs a nother fetch request!!! Create object in the back to mirror the cityObject
       const findCity = (id) => {
             const cityObject = searchData.find(searchData => searchData.cityid === (id));
             return cityObject;
       };
 
-      const handleClick = (city_id) => {   
+      const handleClickFromSearch = (city_id) => {   
             const CityObject = findCity(city_id);
             setCityWeather(CityObject.city);
             setLatitude(CityObject.lat);
@@ -76,6 +74,22 @@ const Home = () => {
             setCityIdWeather(CityObject.cityid);
             setCountryWeather(CityObject.country);
             searchBox.current.value = "";
+      };
+
+
+      const handleClickFromFavourites = (city_id) => {   
+            const url = `http://localhost:8000/api/cities/${city_id}`;
+            fetch(url)
+            .then(repsonse => repsonse.json())
+            .then(data => {
+                  setCityWeather(data[0].city);
+                  setLatitude(data[0].lat);
+                  setLongitude(data[0].lng);
+                  setAdminNameWeather(data[0].admin_name);
+                  setCityIdWeather(data[0].cityid);
+                  setCountryWeather(data[0].country);
+            })
+            .catch(err => console.error(err));
       };
 
 
@@ -109,7 +123,9 @@ const Home = () => {
       // get all favourites for current user
       useEffect(() => {
             handleFavourites();
+            // eslint-disable-next-line
       },[]);
+
 
       const handleFavourites = () => {
             const accessToken = localStorage.getItem('access_token')
@@ -121,6 +137,7 @@ const Home = () => {
             }).then(response => response.json())
             .then(data =>
                   {     
+                        // Get weather for all favourites                        
                         const getFavourites = data.map(async (data) => {
                               const coord = [
                                     data.lat, 
@@ -129,7 +146,7 @@ const Home = () => {
                                     data.timezone,
                                     data.cityid 
                               ];
-                              return FetchFavourites(coord[0], coord[1], coord[2], coord[3], coord[4])
+                              return favouritesWeather(coord[0], coord[1], coord[2], coord[3], coord[4])
                               .then(cityData => {
                                     return cityData;
                               })
@@ -139,7 +156,7 @@ const Home = () => {
                               .then(result => {
                                     setFavourites(result);
                               })
-                  }
+                        }
             ).catch(err => console.error(err));
       };
 
@@ -152,7 +169,7 @@ const Home = () => {
                               oneDayData={oneDayData}
                               date={date}
                               favouritesResults={favourites}
-                              handleClick={handleClick}
+                              handleClick={handleClickFromFavourites}
                               >
                         </MyLocations>
                   </ContainerMyLocations>
@@ -160,7 +177,7 @@ const Home = () => {
                         <Search 
                               handleSearchValue={handleSearchValue}
                               handleKeyDown={handleKeyDown}
-                              handleClick={handleClick} 
+                              handleClick={handleClickFromSearch} 
                               searchData={searchData}
                               searchBox={searchBox}>
                         </Search>
@@ -187,6 +204,8 @@ const Home = () => {
                         <Wiki></Wiki>
                   </ContainerWiki>
             </DashboardContainer>
+            <Footer>*Cities data from simplemaps.com/data/world-cities / Weather data from api.met.no and openweather.com</Footer>
+
             </>
       )
 }
@@ -241,6 +260,11 @@ const ContainerWeather = styled.div`
       }
 `;
 
+const Footer = styled.footer`
+      text-align: center; 
+      font-size: 12px; 
+      padding: 50px 0 15px 0;
+`
 
 
 export default Home;

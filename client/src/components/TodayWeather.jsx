@@ -7,9 +7,7 @@ const TodayWeather = (props) => {
 
       const oneDayData = props.oneDayData;
       const openWeather = props.openWeather;
-      // const temperatureNow = openWeather?.main?.temp? parseInt(openWeather.main.temp -273.15) : null;
       const tempNow = oneDayData.length > 0 ? parseInt(oneDayData[0].instant.details.air_temperature) : null;
-
       const feelsLike = openWeather?.main?.feels_like? parseInt(openWeather.main.feels_like -273.15) : null;
       const temperatureMax = openWeather?.main?.temp_max? parseInt(openWeather.main.temp_max -273.15) : null;
       const temperatureMin = openWeather?.main?.temp_min? parseInt(openWeather.main.temp_min -273.15) : null;
@@ -144,7 +142,7 @@ const TodayDetails = styled.div`
 `;
 
 const TodayContainer = styled.div`
-      padding: 5px;
+      padding: 5px 0px 5px 5px;
       width: 100%;
       position: relative;
       margin-top: 25px;

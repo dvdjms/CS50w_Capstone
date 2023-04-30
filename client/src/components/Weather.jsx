@@ -16,7 +16,6 @@ const Weather = (props) => {
 
       const handleMyLocation = () => {
             favourites(() => {
-                  handleFavouritesInParent();
                   props.handleFavourites();
             })
       };
@@ -37,13 +36,10 @@ const Weather = (props) => {
                         cityid: props.cityid,
                   }),
             }).then(response => response.json())
-            .then(data => console.log(data))
+            .then(data => {
+                  callback();
+            })
             .catch(err => console.error(err));
-            callback();
-      };
-
-      const handleFavouritesInParent = () => {
-            props.handleFavourites();
       };
 
       const isFavourite = ()=>  {
@@ -54,7 +50,6 @@ const Weather = (props) => {
                   return 'Add';
             }
       };
-
 
       return (
             <>
@@ -85,6 +80,7 @@ const Weather = (props) => {
                   <DailyWeather 
                         oneDayData={props.oneDayData}
                         tenDayData={props.tenDayData}
+                        openWeather={props.openWeather}
                   ></DailyWeather>
             </WeatherContainer>
             </>
@@ -155,7 +151,7 @@ const WeatherContainer = styled.div`
 const DateContainer = styled.div`
       display: flex;
       justify-content: space-between;
-      padding: 10px 10px 7px 6px;
+      padding: 20px 10px 7px 6px;
       overflow-x: scroll;
       width: 100%;
 `;
