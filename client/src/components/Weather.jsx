@@ -142,7 +142,7 @@ const WeatherContainer = styled.div`
       border: solid 2px goldenrod;
       border-radius: 10px;
       width: 500px;
-      padding: 7px 0px 7px 7px;
+      padding: 7px 0px 12px 7px;
       @media (max-width: 568px) {
             width: 350px;
       }
