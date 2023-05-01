@@ -127,13 +127,15 @@ const Span = styled.span`
 `;
 
 const WeatherIconOuterContainer = styled.div`
+      background-color:#fcfcce;
       border-right: 1px solid #e6a84a;
       border-bottom: 1px solid #e6a84a;
       border-left: 1px solid #e6a84a;
       border-radius: 0 0 10px 10px;
+      box-shadow: 1px 1px gray;
       min-height: 140px;
       display: grid;
-      margin: 0px 9px 0px 4px;
+      margin: 0px 10px 0px 5px;
       grid-template-columns: repeat(4, 1fr);
       grid-template-rows: auto;
       padding: 14px 7px 3px 12px;
@@ -154,6 +156,7 @@ const WeatherIconInnerContainer = styled.div`
       border: 1px solid #e6a84a;
       border-radius: 10px;
       background: linear-gradient(15deg,#f8e09f 60%, #f3ebb8);
+      box-shadow: 1px 1px gray;
       height: 90%;
       padding: 5px;
       width: 95%;
@@ -163,23 +166,6 @@ const WeatherIcon = styled.img`
       width: 55%;
       margin: 3px 0 0 20px;
 
-`;
-
-const DaysOuterContainer = styled.div`
-      display: flex;
-      margin: 0px 7px 0 0px;
-`;
-
-const DaysInnerContainer = styled.ul`
-      list-style: none;
-      float: left;
-      padding: 0 0 0 4px;
-      margin: 0;
-      display: flex;
-      overflow-x: scroll;
-      ::-webkit-scrollbar {
-            display: none;
-      }
 `;
 
 const Day = styled.li`
@@ -196,22 +182,32 @@ const Day = styled.li`
       }
 `;
 
-const Day1 = styled.li`
-      border-radius: 10px 10px 0 0;
-      border-top: 1px solid goldenrod;
-      border-right: 1px solid goldenrod;
-      border-left: 1px solid goldenrod;
+const Day1 = styled(Day)`
       background-color: #fcfcce;
-      border-bottom: 'none';
-      font-size: 11px;
-      text-align: center;
-      height: 30px;
-      padding: 5px;
-      min-width: 67px;
-      &:hover{
-            cursor: pointer;
-    }
+      border-bottom: 0px;
 `;
+
+const DaysOuterContainer = styled.div`
+      display: flex;
+      margin: 0px 9px 0 5px;
+`;
+
+const DaysInnerContainer = styled.ul`
+      list-style: none;
+      float: left;
+      padding: 0 0 0 4px;
+      margin: 0;
+      display: flex;
+      overflow-x: scroll;
+      ::-webkit-scrollbar {
+            display: none;
+      }
+      scroll-snap-type: inline mandatory;
+      ${Day} {
+            scroll-snap-align: start;
+      }
+`;
+
 
 
 export default DailyWeather;

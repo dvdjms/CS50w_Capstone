@@ -8,9 +8,9 @@ import TodayWeather from './TodayWeather';
 const Weather = (props) => {
 
       const dateOptions = {
-            weekday: "short",
+            weekday: "long",
             year: "numeric",
-            month: "short",
+            month: "long",
             day: "numeric",
       };
 

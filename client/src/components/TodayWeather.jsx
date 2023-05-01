@@ -35,9 +35,11 @@ const TodayWeather = (props) => {
       return (
             <>
             <TodayContainer>
+                  <TodayInnerContainer>
                   <WeatherIcon alt={symbol} src={`/weathericons/${symbol}.svg`}></WeatherIcon>
                   <TodayMax>{tempNow}&deg;</TodayMax>
                   <TodayFeelsLike>Feels like {feelsLike}&deg;</TodayFeelsLike>
+                  </TodayInnerContainer>
                   <TodayDetails onClick={handleOnClick} ref={expand}>
                         <WeatherChart><Span1>Maximum</Span1> <Data>{temperatureMax}&deg;c</Data></WeatherChart>
                         {/* <WeatherChart><Span1>Rain</Span1> <Data>{rain}mm</Data></WeatherChart> */}
@@ -84,9 +86,24 @@ const Span1 = styled.span`
       font-size: 12px;
 `;
 
+const TodayInnerContainer = styled.div`
+      background: linear-gradient(15deg,#f7f8c3 60%, #fffbab);
+      box-shadow: 1px 1px 1.5px 1.5px #9d9f83;
+      border-radius: 15px;
+      height: 140px;
+      margin: 5px 15px 5px 25px;
+      width: 80%;
+      border: 1px solid #e6a84a;
+      float: left;
+      @media (max-width: 568px) {
+            height: 130px;
+            font-size: 12px;
+      }
+`
+
 const WeatherIcon = styled.img`
       width: 30%;
-      margin: 5px 40px 0 15px;
+      margin: 10px 38px 0 15px;
       float: left;
       text-align: right;
       z-index: 3;
@@ -94,8 +111,8 @@ const WeatherIcon = styled.img`
 
 const TodayMax = styled.div`
       float: left;
-      font-size: 48px;
-      padding-top: 30px;
+      font-size: 42px;
+      padding-top: 32px;
       text-align: right;
       width: 15%;
 `;
@@ -103,8 +120,8 @@ const TodayMax = styled.div`
 const TodayFeelsLike = styled.div`
       float: left;
       font-size: 18px;
-      padding-top: 62px;
-      padding-left: 5px;
+      padding-top: 59px;
+      padding-left: 10px;
       text-align: left;
       width: 35%;
       @media (max-width: 568px) {
@@ -151,6 +168,3 @@ const TodayContainer = styled.div`
 
 
 export default TodayWeather;
-
-
-

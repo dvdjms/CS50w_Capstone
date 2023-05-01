@@ -66,6 +66,7 @@ const Time = styled.span`
 `;
 
 const Location = styled.div`
+      box-shadow: .7px .7px gray;
       cursor: pointer;
       border: solid #e6a84a;
       border-radius: 10px;
@@ -78,9 +79,6 @@ const Location = styled.div`
 `;
 
 const MyLocationsContainer = styled.div`
-      /* transform: {display: block};
-      transition: transform 2s ease-in; */
-
       background-color: #fcceef;
       border: solid 2px goldenrod;
       border-radius: 10px;
@@ -107,6 +105,3 @@ const H4 = styled.h1`
 
 
 export default MyLocations;
-
-
-

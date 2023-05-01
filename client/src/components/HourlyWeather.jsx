@@ -52,11 +52,14 @@ const UL = styled.ul`
 `;
 
 const List = styled.li`
+      background: linear-gradient(15deg,#f7f8c3 80%, #fffbab);
       float: left;
       border: #e6a84a solid;
       border-radius: 10px;
+      box-shadow: .7px .7px #9c9c9c;
       height: 78px;
       padding: 4px 0 0 0;
+      margin-bottom: 1px;
       width: 50px;
       text-align: center;
 `;
@@ -75,4 +78,3 @@ const WeatherIconHourly = styled.img`
 
 
 export default HourlyWeather;
-
