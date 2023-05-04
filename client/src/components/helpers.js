@@ -36,6 +36,14 @@ const GetLocalDay = (stringDate, timezone) => {
 };
 
 
+// converts string time to string time with timezone of choice
+const ConvertStringTimezone = (stringDate, timezone) => {
+      const objectDate = new Date(stringDate);
+      const localTime = GetLocalTime(objectDate, timezone);
+      return localTime.toString();
+}
+
+
 const ConvertTemperature = (unit, temperature) => {
       if (unit === 'celcius') {
             const result = (temperature * 9 / 5) + 32;
@@ -75,5 +83,5 @@ const favouritesWeather = async (latitude, longitude, city_ascii, timezone, city
 }
 
 
-export { ConvertTime, ConvertTemperature, favouritesWeather, GetLocalTime, GetLocalHours, GetLocalDay};
+export { ConvertTime, ConvertTemperature, favouritesWeather, GetLocalTime, GetLocalHours, GetLocalDay, ConvertStringTimezone};
 

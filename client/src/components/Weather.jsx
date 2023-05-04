@@ -82,10 +82,18 @@ const Weather = (props) => {
                         tenDayData={props.tenDayData}
                         openWeather={props.openWeather}
                   ></DailyWeather>
+                   <SpanParagraph>*Today: 24hrs from now. Other days: 24hrs from 00:00 GMT. Timezone adjusted.</SpanParagraph>
             </WeatherContainer>
             </>
       )
 }
+
+const SpanParagraph = styled.span`
+      float:right;
+      font-size: 8px;
+      padding: 2px 15px 0 0;
+      margin: 2px;
+`;
 
 const MyLocations = styled.button`
       border-radius: 5px;
@@ -142,7 +150,7 @@ const WeatherContainer = styled.div`
       border: solid 2px goldenrod;
       border-radius: 10px;
       width: 500px;
-      padding: 7px 0px 12px 7px;
+      padding: 7px 0px 17px 7px;
       @media (max-width: 568px) {
             width: 350px;
       }

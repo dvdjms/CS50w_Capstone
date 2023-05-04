@@ -12,6 +12,7 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
 import requests
+import datetime
 
 
 class CreateUserView(generics.CreateAPIView):
@@ -106,10 +107,11 @@ def Weather(request):
     data = json.loads(request.body)
     latitude = str(data['latitude'])
     longitude = str(data['longitude'])
-    # OpenWeather Api for todays weather
+    # OpenWeather Api for todays weather, weather details, timezone
     response1 = requests.get('https://api.openweathermap.org/data/2.5/weather?lat=' + latitude + '&lon=' + longitude + '&appid=03f368dbb853b09836b1ab06b911628b')
     openWeather = response1.json()
-    # Norway Met Api for future weather and weather symbols
+
+    # Norway Met Api for 10 day forecast weather and weather symbol codes
     headers = {
         'User-Agent': 'https://github.com/dvdjms/CS50w_Capstone'
     }
@@ -117,6 +119,7 @@ def Weather(request):
     weather2 = response2.json()
     timeseries = weather2['properties'].get('timeseries', [])
 
+    # Iterate and obtain the first 24 hours from the api weather request
     twentyfour_hour_data = []
     temp = {}
     for i in range(24):
@@ -126,34 +129,48 @@ def Weather(request):
         twentyfour_hour_data.append(data)
         data.update(temp)
 
+    # Iterate the entire 10 days (...obtaining times 00:00, 06:00, 12:00, 18:00) 
     ten_day_data = []
     temp_ = {}
-    for i in range(25, len(timeseries)):
+    for i in range(len(timeseries)):
         data = timeseries[i].get('data')
         time = timeseries[i].get('time')
-        temp_ = {'time': time}
-        ten_day_data.append(data)
-        data.update(temp_)
+        getDate = datetime.datetime.strptime(time, '%Y-%m-%dT%H:%M:%SZ')
+        if getDate.hour % 6 == 0:
+            temp_ = {'time': time}
+            ten_day_data.append(data)
+            data.update(temp_)
+
+    # Extract the two digit day from time, and group based on the day
+    grouped_10_day_data = []
+    for i in range(len(ten_day_data)):
+        item = ten_day_data[i]
+        x = slice(8,10)
+        two_digit_day = int(item['time'][x])
+        grouped_10_day_data.append({two_digit_day: item})
+ 
+    # Iterate over grouped_10_day_data and group by dictionary keys
+    grouped_data = {}
+    for item in grouped_10_day_data:
+        for key, value in item.items():
+            if key not in  grouped_data:
+                grouped_data[key] = []
+            grouped_data[key].append(value)
+    
+    # Rename group key with list position for iteration purposes in frontend
+    grouped_data = {index: value for index, value in enumerate(grouped_data.values())}
+    ten_Day_Data_Grouped = list(grouped_data.values())
 
     return JsonResponse({
         'oneDay': {'twentyfourData' : twentyfour_hour_data},
-        'tenDay': {'tenDayData': ten_day_data},
+        'tenDay': {'tenDayData': ten_Day_Data_Grouped},
         'openWeather': {'openWeather' : openWeather}
     })
 
 
 
-# def Favourites():
-    
-#     body1 = {body: {'latitude': 55.55, 'longitude': 55.55}}
 
-#     newdata = Weather(body1)
-#     print(newdata)
-#     return newdata
-
-
-# Favourites()
-
+# To delete outstanding / blacklisted tokens created during development
 
 # from datetime import datetime
 # from rest_framework_simplejwt.token_blacklist.models import \

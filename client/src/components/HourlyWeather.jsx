@@ -56,7 +56,7 @@ const List = styled.li`
       float: left;
       border: #e6a84a solid;
       border-radius: 10px;
-      box-shadow: .7px .7px #9c9c9c;
+      box-shadow: 1px 1px #9c9c9c;
       height: 78px;
       padding: 4px 0 0 0;
       margin-bottom: 1px;

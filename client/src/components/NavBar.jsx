@@ -20,7 +20,6 @@ const NavBar = () => {
                   <Ul>
                         <Li><NavLink to="/">Home</NavLink></Li>
                         <Li><NavLink to="/learn">Learn</NavLink></Li> 
-                        <Li><NavLink to="/about">About</NavLink></Li> 
                         <Li><NavLink to="/logout">Logout</NavLink></Li>
                   </Ul> :
                   <Ulend>

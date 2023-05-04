@@ -1,29 +1,39 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { GetLocalDay } from '../components/helpers.js';
+import { GetLocalDay, ConvertStringTimezone } from '../components/helpers.js';
 
 
 const DailyWeather = (props) => {
       const [activeDay, setActiveDay] = useState('day1')
 
       const oneDayData = props.oneDayData;
-      // const tenDayData = props.TenDayData;
+      const tenDayData = props.tenDayData;
       const timezone = props.openWeather.timezone;
 
-      const temperatureMax1 = parseInt(oneDayData.length > 0 ? oneDayData[0].instant.details.air_temperature : null);
-      // const temperatureMin1 = parseInt(oneDayData.length > 0 ? oneDayData[0].next_6_hours.details.air_temperature_min : null);
-      const temperatureMax2 = parseInt(oneDayData.length > 0 ? oneDayData[5].instant.details.air_temperature : null);
-      const temperatureMax3 = parseInt(oneDayData.length > 0 ? oneDayData[11].instant.details.air_temperature : null);
-      const temperatureMax4 = parseInt(oneDayData.length > 0 ? oneDayData[17].instant.details.air_temperature : null);
-      const symbol = oneDayData.length > 0 ? oneDayData[0].next_1_hours.summary.symbol_code : null;
-      const symbol1 = oneDayData.length > 0 ? oneDayData[5].next_1_hours.summary.symbol_code : null;
-      const symbol2 = oneDayData.length > 0 ? oneDayData[11].next_1_hours.summary.symbol_code : null;
-      const symbol3 = oneDayData.length > 0 ? oneDayData[17].next_1_hours.summary.symbol_code : null;
-      const time1 = oneDayData.length > 0 ? oneDayData[5].time.substr(11, 5) : null;
-      const time2 = oneDayData.length > 0 ? oneDayData[11].time.substr(11, 5) : null;
-      const time3 = oneDayData.length > 0 ? oneDayData[17].time.substr(11, 5) : null;
+      // get first 24 hour data
+      const temperatureMax1 = parseInt(oneDayData.length > 0 ? oneDayData[0].instant.details?.air_temperature: null);
+      const temperatureMax2 = parseInt(oneDayData.length > 0 ? oneDayData[5].next_6_hours?.details?.air_temperature_max : null);
+      const temperatureMax3 = parseInt(oneDayData.length > 0 ? oneDayData[11].next_6_hours?.details?.air_temperature_max : null);
+      const temperatureMax4 = parseInt(oneDayData.length > 0 ? oneDayData[17].next_6_hours?.details?.air_temperature_max : null);
+      const temperatureMin1 = parseInt(oneDayData.length > 0 ? oneDayData[0].next_6_hours?.details?.air_temperature_min : null);
+      const temperatureMin2 = parseInt(oneDayData.length > 0 ? oneDayData[5].next_6_hours?.details?.air_temperature_min : null);
+      const temperatureMin3 = parseInt(oneDayData.length > 0 ? oneDayData[11].next_6_hours?.details?.air_temperature_min : null);
+      const temperatureMin4 = parseInt(oneDayData.length > 0 ? oneDayData[17].next_6_hours?.details?.air_temperature_min : null);
+      const symbol = oneDayData.length > 0 ? oneDayData[0].next_1_hours?.summary?.symbol_code : null;
+      const symbol1 = oneDayData.length > 0 ? oneDayData[5].next_6_hours?.summary?.symbol_code : null;
+      const symbol2 = oneDayData.length > 0 ? oneDayData[11].next_6_hours?.summary?.symbol_code : null;
+      const symbol3 = oneDayData.length > 0 ? oneDayData[17].next_6_hours?.summary?.symbol_code : null;
+      const time_1 = oneDayData.length > 0 ? oneDayData[0].time : null;
+      const time1 = ConvertStringTimezone(time_1, timezone).substr(16, 5);
+      const time_2 = oneDayData.length > 0 ? oneDayData[5].time : null;
+      const time2 = ConvertStringTimezone(time_2, timezone).substr(16, 5);
+      const time_3 = oneDayData.length > 0 ? oneDayData[11].time : null;
+      const time3 = ConvertStringTimezone(time_3, timezone).substr(16, 5);
+      const time_4 = oneDayData.length > 0 ? oneDayData[17].time : null;
+      const time4 = ConvertStringTimezone(time_4, timezone).substr(16, 5);
       const day = oneDayData.length > 0 ? oneDayData[0].time : null;
  
+      // function to change day when clicked on
       const handleDayClick = (day) => {
             const activeElement = document.getElementById(activeDay);
             const newElement = document.getElementById(day);
@@ -37,7 +47,42 @@ const DailyWeather = (props) => {
             }
             setActiveDay(day);
       };
-      
+
+      // create new object with specific data
+      const summaryForecast = (sixHourly) => {
+            const newSixHourlyArray = [];
+            const sixHourlyObject = sixHourly.map((tenDay) => {
+                  const time = tenDay.time ?? null;
+                  const newTime = ConvertStringTimezone(time, timezone);
+                  const weatherObject = {
+                        'tempMax': parseInt(tenDay.next_6_hours?.details?.air_temperature_max ?? null),
+                        'tempMin': parseInt(tenDay.next_6_hours?.details?.air_temperature_min ?? null),
+                        'windspeed': tenDay.instant?.details.wind_speed ?? null,
+                        'precipitation': tenDay.next_6_hours?.details?.precipitation_amount ?? null,
+                        'symbol': tenDay.next_6_hours?.summary?.symbol_code ?? null,
+                        'time': newTime.substr(16, 5),
+                  };
+                  newSixHourlyArray.push(weatherObject);
+                  return newSixHourlyArray;
+            });
+            return sixHourlyObject;
+      };
+   
+      // pass tenDayData through summaryForecast function
+      const tempList = [];
+      const getTenDayForecast = () => {
+            if(Array.isArray(tenDayData)) {
+                  for (let i = 0; i < tenDayData.length; i++){
+                        tempList.push(summaryForecast(tenDayData[i]));
+                      
+                  };
+                  return tempList;
+            }
+            else {
+                  return;
+            };
+      };
+      const finalGroupObject = getTenDayForecast();
 
       return (
             <>
@@ -69,46 +114,170 @@ const DailyWeather = (props) => {
                   </DaysOuterContainer>
 
 
-                  {activeDay === 'day1' && <WeatherIconOuterContainer>
-                        <WeatherIconInnerContainer>
-                              <SpanTime>Now</SpanTime>
-                              <WeatherIcon alt={symbol} src={`/weathericons/${symbol}.svg`}></WeatherIcon>
-                              <Span>{temperatureMax1}&deg;</Span>
-                        </WeatherIconInnerContainer>
-                        <WeatherIconInnerContainer>
-                        <SpanTime>{time1}</SpanTime>
-                              <WeatherIcon alt={symbol1} src={`/weathericons/${symbol1}.svg`}></WeatherIcon>
-                              <Span>{temperatureMax2}&deg;</Span>
-                        </WeatherIconInnerContainer>
-                        <WeatherIconInnerContainer>
+                  {activeDay === 'day1' && 
+                        <WeatherIconOuterContainer>
+                              <WeatherIconInnerContainer>
+                                    <SpanTime>{time1}</SpanTime>
+                                    <WeatherIcon alt={symbol} src={`/weathericons/${symbol}.svg`}></WeatherIcon>
+                                    <SpanTempMax>{temperatureMax1}&deg;</SpanTempMax>
+                                    <SpanTempMin>{temperatureMin1}&deg;</SpanTempMin>
+                              </WeatherIconInnerContainer>
+                              <WeatherIconInnerContainer>
                               <SpanTime>{time2}</SpanTime>
-                              <WeatherIcon alt={symbol2} src={`/weathericons/${symbol2}.svg`}></WeatherIcon>
-                              <Span>{temperatureMax3}&deg;</Span>
-                        </WeatherIconInnerContainer>
-                        <WeatherIconInnerContainer>
-                              <SpanTime>{time3}</SpanTime>
-                              <WeatherIcon alt={symbol3} src={`/weathericons/${symbol3}.svg`}></WeatherIcon>
-                              <Span>{temperatureMax4}&deg;</Span>
-                        </WeatherIconInnerContainer>
-                  </WeatherIconOuterContainer>}
+                                    <WeatherIcon alt={symbol1} src={`/weathericons/${symbol1}.svg`}></WeatherIcon>
+                                    <SpanTempMax>{temperatureMax2}&deg;</SpanTempMax>
+                                    <SpanTempMin>{temperatureMin2}&deg;</SpanTempMin>
+                              </WeatherIconInnerContainer>
+                              <WeatherIconInnerContainer>
+                                    <SpanTime>{time3}</SpanTime>
+                                    <WeatherIcon alt={symbol2} src={`/weathericons/${symbol2}.svg`}></WeatherIcon>
+                                    <SpanTempMax>{temperatureMax3}&deg;</SpanTempMax>
+                                    <SpanTempMin>{temperatureMin3}&deg;</SpanTempMin>
+                              </WeatherIconInnerContainer>
+                              <WeatherIconInnerContainer>
+                                    <SpanTime>{time4}</SpanTime>
+                                    <WeatherIcon alt={symbol3} src={`/weathericons/${symbol3}.svg`}></WeatherIcon>
+                                    <SpanTempMax>{temperatureMax4}&deg;</SpanTempMax>
+                                    <SpanTempMin>{temperatureMin4}&deg;</SpanTempMin>
+                              </WeatherIconInnerContainer>
+                        </WeatherIconOuterContainer>
+                  }
 
-                  {activeDay === 'day2' && <div> weather day 2 </div>}
-                  {activeDay === 'day3' && <div> weather day 3 </div>}
-                  {activeDay === 'day4' && <div> weather day 4 </div>}
-                  {activeDay === 'day5' && <div> weather day 5 </div>}
-                  {activeDay === 'day6' && <div> weather day 6 </div>}
-                  {activeDay === 'day7' && <div> weather day 7 </div>}
-                  {activeDay === 'day8' && <div> weather day 8 </div>}
-                  {activeDay === 'day9' && <div> weather day 9 </div>}
-                  {activeDay === 'day10' && <div> weather day 10 </div>}
+                  {activeDay === 'day2' && 
+                        <WeatherIconOuterContainer>
+                              {Array.isArray(finalGroupObject[0][1]) && finalGroupObject[0][1].length > 0 && finalGroupObject[0][1].map((object, index) => {
+                                    return ( 
+                                          <WeatherIconInnerContainer key={index}>
+                                                <SpanTime>{object.time}</SpanTime>
+                                                <WeatherIcon alt={object.symbol} src={`/weathericons/${object.symbol}.svg`}></WeatherIcon>
+                                                <SpanTempMax>{object.tempMax}&deg;</SpanTempMax>
+                                                <SpanTempMin>{object.tempMin}&deg;</SpanTempMin>
+                                          </WeatherIconInnerContainer>
+                                          )
+                              })}
+                        </WeatherIconOuterContainer>
+                  }
+   
+                  {activeDay === 'day3' &&                         
+                        <WeatherIconOuterContainer>
+                              {Array.isArray(finalGroupObject[1][1]) && finalGroupObject[1][1].length > 0 && finalGroupObject[1][1].map((object, index) => {
+                                    return ( 
+                                          <WeatherIconInnerContainer key={index}>
+                                                <SpanTime>{object.time}</SpanTime>
+                                                <WeatherIcon alt={object.symbol} src={`/weathericons/${object.symbol}.svg`}></WeatherIcon>
+                                                <SpanTempMax>{object.tempMax}&deg;</SpanTempMax>
+                                                <SpanTempMin>{object.tempMin}&deg;</SpanTempMin>
+                                          </WeatherIconInnerContainer>
+                                          )
+                              })}
+                        </WeatherIconOuterContainer>}
+
+                  {activeDay === 'day4' && 
+                        <WeatherIconOuterContainer>
+                              {Array.isArray(finalGroupObject[2][1]) && finalGroupObject[2][1].length > 0 && finalGroupObject[2][1].map((object, index) => {
+                                    return ( 
+                                          <WeatherIconInnerContainer key={index}>
+                                                <SpanTime>{object.time}</SpanTime>
+                                                <WeatherIcon alt={object.symbol} src={`/weathericons/${object.symbol}.svg`}></WeatherIcon>
+                                                <SpanTempMax>{object.tempMax}&deg;</SpanTempMax>
+                                                <SpanTempMin>{object.tempMin}&deg;</SpanTempMin>
+                                          </WeatherIconInnerContainer>
+                                          )
+                              })}
+                        </WeatherIconOuterContainer>}
+
+                  {activeDay === 'day5' && 
+                        <WeatherIconOuterContainer>
+                              {Array.isArray(finalGroupObject[3][1]) && finalGroupObject[3][1].length > 0 && finalGroupObject[3][1].map((object, index) => {
+                                    return ( 
+                                          <WeatherIconInnerContainer key={index}>
+                                                <SpanTime>{object.time}</SpanTime>
+                                                <WeatherIcon alt={object.symbol} src={`/weathericons/${object.symbol}.svg`}></WeatherIcon>
+                                                <SpanTempMax>{object.tempMax}&deg;</SpanTempMax>
+                                                <SpanTempMin>{object.tempMin}&deg;</SpanTempMin>
+                                          </WeatherIconInnerContainer>
+                                          )
+                              })}
+                        </WeatherIconOuterContainer>}
+
+                  {activeDay === 'day6' && 
+                        <WeatherIconOuterContainer>
+                              {Array.isArray(finalGroupObject[4][1]) && finalGroupObject[4][1].length > 0 && finalGroupObject[4][1].map((object, index) => {
+                                    return ( 
+                                          <WeatherIconInnerContainer key={index}>
+                                                <SpanTime>{object.time}</SpanTime>
+                                                <WeatherIcon alt={object.symbol} src={`/weathericons/${object.symbol}.svg`}></WeatherIcon>
+                                                <SpanTempMax>{object.tempMax}&deg;</SpanTempMax>
+                                                <SpanTempMin>{object.tempMin}&deg;</SpanTempMin>
+                                          </WeatherIconInnerContainer>
+                                          )
+                              })}
+                        </WeatherIconOuterContainer>}
+
+                  {activeDay === 'day7' && 
+                        <WeatherIconOuterContainer>
+                              {Array.isArray(finalGroupObject[5][1]) && finalGroupObject[5][1].length > 0 && finalGroupObject[5][1].map((object, index) => {
+                                    return ( 
+                                          <WeatherIconInnerContainer key={index}>
+                                                <SpanTime>{object.time}</SpanTime>
+                                                <WeatherIcon alt={object.symbol} src={`/weathericons/${object.symbol}.svg`}></WeatherIcon>
+                                                <SpanTempMax>{object.tempMax}&deg;</SpanTempMax>
+                                                <SpanTempMin>{object.tempMin}&deg;</SpanTempMin>
+                                          </WeatherIconInnerContainer>
+                                          )
+                              })}
+                        </WeatherIconOuterContainer>}
+
+                  {activeDay === 'day8' && 
+                        <WeatherIconOuterContainer>
+                              {Array.isArray(finalGroupObject[6][1]) && finalGroupObject[6][1].length > 0 && finalGroupObject[6][1].map((object, index) => {
+                                    return ( 
+                                          <WeatherIconInnerContainer key={index}>
+                                                <SpanTime>{object.time}</SpanTime>
+                                                <WeatherIcon alt={object.symbol} src={`/weathericons/${object.symbol}.svg`}></WeatherIcon>
+                                                <SpanTempMax>{object.tempMax}&deg;</SpanTempMax>
+                                                <SpanTempMin>{object.tempMin}&deg;</SpanTempMin>
+                                          </WeatherIconInnerContainer>
+                                          )
+                              })}
+                        </WeatherIconOuterContainer>}
+
+                  {activeDay === 'day9' && 
+                        <WeatherIconOuterContainer>
+                              {Array.isArray(finalGroupObject[7][1]) && finalGroupObject[7][1].length > 0 && finalGroupObject[7][1].map((object, index) => {
+                                    return ( 
+                                          <WeatherIconInnerContainer key={index}>
+                                                <SpanTime>{object.time}</SpanTime>
+                                                <WeatherIcon alt={object.symbol} src={`/weathericons/${object.symbol}.svg`}></WeatherIcon>
+                                                <SpanTempMax>{object.tempMax}&deg;</SpanTempMax>
+                                                <SpanTempMin>{object.tempMin}&deg;</SpanTempMin>
+                                          </WeatherIconInnerContainer>
+                                          )
+                              })}
+                        </WeatherIconOuterContainer>}
+
+                  {activeDay === 'day10' && 
+                        <WeatherIconOuterContainer>
+                              {Array.isArray(finalGroupObject[8][1]) && finalGroupObject[8][1].length > 0 && finalGroupObject[8][1].map((object, index) => {
+                                    return ( 
+                                          <WeatherIconInnerContainer key={index}>
+                                                <SpanTime>{object.time}</SpanTime>
+                                                <WeatherIcon alt={object.symbol} src={`/weathericons/${object.symbol}.svg`}></WeatherIcon>
+                                                <SpanTempMax>{object.tempMax}&deg;</SpanTempMax>
+                                                <SpanTempMin>{object.tempMin}&deg;</SpanTempMin>
+                                          </WeatherIconInnerContainer>
+                                          )
+                              })}
+                        </WeatherIconOuterContainer>}
             </>
-      )
-}
+      );
+};
 
 const Paragraph = styled.p`
       font-size: 12px;
+      height: 20px;
       margin: 0px;
-      padding: 3px 0 3px 7px;
+      padding: 0 0 6px 7px;
 `;
 
 const SpanTime = styled.span`
@@ -118,12 +287,21 @@ const SpanTime = styled.span`
       width: 100%;
 `;
 
-const Span = styled.span`
+const SpanTempMax = styled.span`
       float: left;
       font-size: 12px;
-      padding-top: 5px;
-      text-align: center;
-      width: 100%;
+      font-weight: 600;
+      height: 23px;
+      padding-top: 3px;
+      text-align: right;
+      width: 50%;
+`;
+
+const SpanTempMin = styled(SpanTempMax)`
+      font-size: 10px;
+      text-align: left;
+      padding-left: 5px;
+      padding-top: 5.2px;
 `;
 
 const WeatherIconOuterContainer = styled.div`
@@ -142,12 +320,8 @@ const WeatherIconOuterContainer = styled.div`
       @media (max-width: 568px) {
             grid-template-columns: repeat(2, 1fr);
             grid-template-rows: auto;
-            width: 65%;
-            margin: auto;
-      }
-      @media (max-width: 400px) {
-            grid-template-columns: repeat(1, 1fr);
-            grid-template-rows: auto;
+            width: 95.3%;
+            min-height: 300px;
       }
 `;
 
@@ -160,12 +334,18 @@ const WeatherIconInnerContainer = styled.div`
       height: 90%;
       padding: 5px;
       width: 95%;
+      @media (max-width: 568px) {
+            padding: 3px;
+      }
 `;
 
 const WeatherIcon = styled.img`
       width: 55%;
       margin: 3px 0 0 20px;
-
+      @media (max-width: 568px) {
+            width: 40%;
+            margin: 3px 0 0 38px;
+      }
 `;
 
 const Day = styled.li`
@@ -207,7 +387,6 @@ const DaysInnerContainer = styled.ul`
             scroll-snap-align: start;
       }
 `;
-
 
 
 export default DailyWeather;

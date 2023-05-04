@@ -5,7 +5,6 @@ import Login from "./container/Login"
 import Register from "./container/Register";
 import NavBar from "./components/NavBar";
 import Logout from "./container/Logout"
-import About from "./container/About";
 import Learn from "./container/Learn";
 
 
@@ -58,7 +57,6 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/learn" element={<Learn />} />
-          <Route path="/about" element={<About />} />
           <Route path="/login" element={<Login />} />
           <Route path="/logout" element={<Logout />} />
           <Route path="/register" element={<Register />} />

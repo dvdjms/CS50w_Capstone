@@ -65,6 +65,7 @@ const Home = () => {
             return cityObject;
       };
 
+      
       const handleClickFromSearch = (city_id) => {   
             const CityObject = findCity(city_id);
             setCityWeather(CityObject.city);
@@ -98,7 +99,10 @@ const Home = () => {
             const fetchData = () => {
                   fetch('/weather', {
                         method: "POST",
-                        headers: { 'Content-Type': 'application/json' },
+                        headers: {
+                              'Accept': 'application/json', 
+                              'Content-Type': 'application/json'
+                        },
                         body: JSON.stringify({
                               latitude: latitude,
                               longitude: longitude,
