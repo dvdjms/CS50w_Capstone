@@ -145,7 +145,7 @@ const DailyWeather = (props) => {
 
                   {activeDay === 'day2' && 
                         <WeatherIconOuterContainer>
-                              {Array.isArray(finalGroupObject[0][1]) && finalGroupObject[0][1].length > 0 && finalGroupObject[0][1].map((object, index) => {
+                              {Array.isArray(finalGroupObject[1][1]) && finalGroupObject[1][1].length > 0 && finalGroupObject[1][1].map((object, index) => {
                                     return ( 
                                           <WeatherIconInnerContainer key={index}>
                                                 <SpanTime>{object.time}</SpanTime>
@@ -160,7 +160,7 @@ const DailyWeather = (props) => {
    
                   {activeDay === 'day3' &&                         
                         <WeatherIconOuterContainer>
-                              {Array.isArray(finalGroupObject[1][1]) && finalGroupObject[1][1].length > 0 && finalGroupObject[1][1].map((object, index) => {
+                              {Array.isArray(finalGroupObject[2][1]) && finalGroupObject[2][1].length > 0 && finalGroupObject[2][1].map((object, index) => {
                                     return ( 
                                           <WeatherIconInnerContainer key={index}>
                                                 <SpanTime>{object.time}</SpanTime>
@@ -174,7 +174,7 @@ const DailyWeather = (props) => {
 
                   {activeDay === 'day4' && 
                         <WeatherIconOuterContainer>
-                              {Array.isArray(finalGroupObject[2][1]) && finalGroupObject[2][1].length > 0 && finalGroupObject[2][1].map((object, index) => {
+                              {Array.isArray(finalGroupObject[3][1]) && finalGroupObject[3][1].length > 0 && finalGroupObject[3][1].map((object, index) => {
                                     return ( 
                                           <WeatherIconInnerContainer key={index}>
                                                 <SpanTime>{object.time}</SpanTime>
@@ -188,7 +188,7 @@ const DailyWeather = (props) => {
 
                   {activeDay === 'day5' && 
                         <WeatherIconOuterContainer>
-                              {Array.isArray(finalGroupObject[3][1]) && finalGroupObject[3][1].length > 0 && finalGroupObject[3][1].map((object, index) => {
+                              {Array.isArray(finalGroupObject[4][1]) && finalGroupObject[4][1].length > 0 && finalGroupObject[4][1].map((object, index) => {
                                     return ( 
                                           <WeatherIconInnerContainer key={index}>
                                                 <SpanTime>{object.time}</SpanTime>
@@ -202,7 +202,7 @@ const DailyWeather = (props) => {
 
                   {activeDay === 'day6' && 
                         <WeatherIconOuterContainer>
-                              {Array.isArray(finalGroupObject[4][1]) && finalGroupObject[4][1].length > 0 && finalGroupObject[4][1].map((object, index) => {
+                              {Array.isArray(finalGroupObject[5][1]) && finalGroupObject[5][1].length > 0 && finalGroupObject[5][1].map((object, index) => {
                                     return ( 
                                           <WeatherIconInnerContainer key={index}>
                                                 <SpanTime>{object.time}</SpanTime>
@@ -216,7 +216,7 @@ const DailyWeather = (props) => {
 
                   {activeDay === 'day7' && 
                         <WeatherIconOuterContainer>
-                              {Array.isArray(finalGroupObject[5][1]) && finalGroupObject[5][1].length > 0 && finalGroupObject[5][1].map((object, index) => {
+                              {Array.isArray(finalGroupObject[6][1]) && finalGroupObject[6][1].length > 0 && finalGroupObject[6][1].map((object, index) => {
                                     return ( 
                                           <WeatherIconInnerContainer key={index}>
                                                 <SpanTime>{object.time}</SpanTime>
@@ -230,7 +230,7 @@ const DailyWeather = (props) => {
 
                   {activeDay === 'day8' && 
                         <WeatherIconOuterContainer>
-                              {Array.isArray(finalGroupObject[6][1]) && finalGroupObject[6][1].length > 0 && finalGroupObject[6][1].map((object, index) => {
+                              {Array.isArray(finalGroupObject[7][1]) && finalGroupObject[7][1].length > 0 && finalGroupObject[7][1].map((object, index) => {
                                     return ( 
                                           <WeatherIconInnerContainer key={index}>
                                                 <SpanTime>{object.time}</SpanTime>
@@ -244,7 +244,7 @@ const DailyWeather = (props) => {
 
                   {activeDay === 'day9' && 
                         <WeatherIconOuterContainer>
-                              {Array.isArray(finalGroupObject[7][1]) && finalGroupObject[7][1].length > 0 && finalGroupObject[7][1].map((object, index) => {
+                              {Array.isArray(finalGroupObject[8][1]) && finalGroupObject[8][1].length > 0 && finalGroupObject[8][1].map((object, index) => {
                                     return ( 
                                           <WeatherIconInnerContainer key={index}>
                                                 <SpanTime>{object.time}</SpanTime>
@@ -258,7 +258,7 @@ const DailyWeather = (props) => {
 
                   {activeDay === 'day10' && 
                         <WeatherIconOuterContainer>
-                              {Array.isArray(finalGroupObject[8][1]) && finalGroupObject[8][1].length > 0 && finalGroupObject[8][1].map((object, index) => {
+                              {Array.isArray(finalGroupObject[9][1]) && finalGroupObject[9][1].length > 0 && finalGroupObject[9][1].map((object, index) => {
                                     return ( 
                                           <WeatherIconInnerContainer key={index}>
                                                 <SpanTime>{object.time}</SpanTime>

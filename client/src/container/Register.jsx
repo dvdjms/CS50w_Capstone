@@ -1,10 +1,10 @@
 import styled from 'styled-components';
-import React from 'react';
+import React, { useState }  from 'react';
 
 const url = "http://127.0.0.1:8000/api/users";
 
 const Register = () => {
-      // const [isAuth, setIsAuth] = useState(false)
+      const [usernameExists, setUsernameExists] = useState('');
 
       const handleSubmit = (e) => {
             e.preventDefault();
@@ -23,10 +23,20 @@ const Register = () => {
                         },
                         body: JSON.stringify(formData),
                   })
+                  .then(response => response.json())
+                  .then(data => {
+                        if (data.username[0] === 'A user with that username already exists.') {
+                              setUsernameExists(data.username[0]);
+                        }
+                        else {
+                              window.location.href = '/login';
+                        };
+                   });
+                  
             } catch(e){
                   console.log(e.message);
-            }
-            window.location.href = '/login';
+            };
+
       };
 
 
@@ -60,8 +70,10 @@ const Register = () => {
                               <input className="form-control" id="confirmpassword" name="confirmpassword" placeholder="Confirm password" required type="password"></input>
                         </FormChild> 
                         <FormChild className="col-12">
-                              <button className="btn btn-primary" type="submit">Register</button>
+                              <Button className="btn btn-primary" type="submit">Register</Button>
+                              <Paragraph>{usernameExists}</Paragraph>
                         </FormChild>
+
                   </form>
             </FormContainer>
             </>
@@ -71,7 +83,7 @@ const Register = () => {
 
 
 const H1 = styled.h1`
-      color: red;
+      color: #924242;
       text-align: center;
       margin-bottom: 5%;
       margin-top: 100px;
@@ -80,11 +92,48 @@ const H1 = styled.h1`
 const FormContainer = styled.div`
       margin: auto;
       width: 600px;
+      @media (max-width: 678px) {
+            width: 500px;
+      }
+      @media (max-width: 568px) {
+            width: 240px;
+      }
 `;
 
 const FormChild = styled.div`
       margin-bottom: 15px;
 `;
 
+const Button = styled.button`
+      float:left;
+      background-color:#ffffff;
+      border: solid #8e0a0a;
+      border-radius: 5px;
+      color: #8e0a0a;
+      font-size: 14px;
+      font-weight: 600;
+      height: 35px;
+      width: 90px;
+      &:hover {
+            background-color: #8e0a0a;
+            border: solid 1px #8e0a0a;
+            color: #ffffff;
+            cursor: pointer;
+      }
+      &:focus {
+            box-shadow: 1px 1px #ba4c4c;
+            outline: #8e0a0a;
+            border: solid 2px #8e0a0a;
+      }
+`;
+
+const Paragraph = styled.p`
+      color: red;
+      float:left;
+      padding: 6px 0 0 60px;
+      @media (max-width: 568px) {
+            padding: 10px 0 0 6px;
+      }
+`;
 
 export default Register;

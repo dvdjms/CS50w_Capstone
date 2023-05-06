@@ -15,17 +15,15 @@ const NavBar = () => {
       return (
             <>
             <NavBarContainer>
-                  <H1>Weatherby</H1>
+                  <H3>WeatherWise</H3>
                   {isAuth ? 
-                  <Ul>
-                        <Li><NavLink to="/">Home</NavLink></Li>
-                        <Li><NavLink to="/learn">Learn</NavLink></Li> 
+                  <ULOut>
                         <Li><NavLink to="/logout">Logout</NavLink></Li>
-                  </Ul> :
-                  <Ulend>
+                  </ULOut> :
+                  <UL>
                         <Li><NavLink to="/login">Login</NavLink></Li>
                         <Li><NavLink to="/register">Register</NavLink></Li>
-                  </Ulend>}
+                  </UL>}
             </NavBarContainer>
             </>
       )
@@ -35,47 +33,65 @@ const NavBar = () => {
 
 const NavBarContainer = styled.div`
       background-color: white;
-      height: 9vh;
+      height: 60px;
       margin: 0px;
       padding: 0px;
-      width: 100vw;
+      width: 100%;
       border: solid white;
       box-shadow: 0 0 30px 0 #dddddd;
       position: fixed;
       top: 0;
       z-index: 2;
+      @media (max-width: 568px) {
+            height: 80px;
+      }
 `;
 
-const H1 = styled.h3`
-      color: #e7bb70;
+const H3 = styled.h3`
+      color: #924242;
       font-family: sans-serif;
       font-weight: 600;
       float: left;
-      padding: 12px 12px 0px 30px;
+      height: 100%;
+      padding: 14px 12px 0px 70px;
       margin: 0;
       width: 30vw;
       position: absolute;
+      @media (max-width: 768px) {
+            padding: 12px 12px 0px 30px;
+      }
+      @media (max-width: 568px) {
+            height: 50%;
+
+            text-align: center;
+            width: 100%;
+      }
 `;
 
-
-const Ul = styled.ul`
-      list-style: none;
-      display: flex;
-      justify-content: center;
-      gap: 3vw;
-      padding: 16px;
-      text-align: center;
-      width: 100vw;
-`;
-
-const Ulend = styled.ul`
+const UL = styled.ul`
       float: right;
       list-style: none;
       display: flex;
       justify-content: space-between;
       padding-right: 30px;
-      margin-top: 25px;
+      margin-top: 18px;
       width: 200px;
+      @media (max-width: 568px) {
+            gap: 10px;
+            justify-content: center;
+            margin-top: 45px;
+            padding-right: 30px;
+            width: 100%;
+      };
+`;
+
+const ULOut = styled(UL)`
+       width: 150px;
+       @media (max-width: 568px) {
+            justify-content: center;
+            margin-top: 45px;
+            width: 100%;
+      };
 `;
 
 const Li = styled.li`
@@ -84,12 +100,13 @@ const Li = styled.li`
 
 
 const NavLink = styled(Link)`
+      color: #924242;
       &:hover {
-            color: #639242;
+            color: #e6a84a;
             text-decoration: none;
       }
       &:active {
-            color: #924242;
+            color: #424a92;
       }
 `;
 

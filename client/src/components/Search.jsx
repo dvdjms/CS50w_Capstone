@@ -10,7 +10,7 @@ const Search = (props) => {
                   <Input 
                         onChange={event => props.handleSearchValue(event.target.value)}
                         onKeyDown={event => props.handleKeyDown(event)}
-                        placeholder="Enter city"
+                        placeholder="Search City"
                         ref={props.searchBox}
                         type="text"
                   />

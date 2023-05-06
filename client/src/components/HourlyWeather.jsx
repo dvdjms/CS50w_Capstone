@@ -52,7 +52,7 @@ const UL = styled.ul`
 `;
 
 const List = styled.li`
-      background: linear-gradient(15deg,#f7f8c3 80%, #fffbab);
+      background: linear-gradient(15deg,#feffd3 60%, #faf8c8);
       float: left;
       border: #e6a84a solid;
       border-radius: 10px;

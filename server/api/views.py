@@ -19,6 +19,11 @@ class CreateUserView(generics.CreateAPIView):
     serializer_class = UserSerializer
     queryset = User.objects.all()
 
+    def checkUsername(self, request):
+        username = request.data.get(request.formData.username)
+        print('username', username)
+        return
+
 
 # Returns top 17 city objects based on user (search) input 
 class CitySearchView(generics.ListAPIView):
@@ -41,7 +46,6 @@ class CityFavouritesView(generics.ListAPIView):
 # Adds or deletes cities from Favourites
 class FavouriteView(generics.ListAPIView, generics.DestroyAPIView, generics.CreateAPIView):
     serializer_class = FavouriteSerializer
-
     def get_queryset(self):
         favourites = Favourite.objects.filter(username=self.request.user)
         return favourites
@@ -69,11 +73,10 @@ class FavouriteView(generics.ListAPIView, generics.DestroyAPIView, generics.Crea
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-# I don't think this is doing much... see app.js regarding token
 class HomeView(APIView):
     permission_classes = (IsAuthenticated,)
     def get(self, request):
-        content = {'message': 'Welcome to the JWT Authentication page!'}
+        content = {'message': 'JWT Authenticated!'}
         return Response(content)
 
 
@@ -87,7 +90,8 @@ class LogoutView(APIView):
             return Response(status=status.HTTP_205_RESET_CONTENT)
         except Exception as e:
             return Response(status=status.HTTP_400_BAD_REQUEST)
-        
+
+
 
 @csrf_exempt
 def wikipedia(request):
@@ -111,7 +115,7 @@ def Weather(request):
     response1 = requests.get('https://api.openweathermap.org/data/2.5/weather?lat=' + latitude + '&lon=' + longitude + '&appid=03f368dbb853b09836b1ab06b911628b')
     openWeather = response1.json()
 
-    # Norway Met Api for 10 day forecast weather and weather symbol codes
+    # Norway Met Api for 10 day forecast and weather symbol codes
     headers = {
         'User-Agent': 'https://github.com/dvdjms/CS50w_Capstone'
     }
@@ -119,7 +123,7 @@ def Weather(request):
     weather2 = response2.json()
     timeseries = weather2['properties'].get('timeseries', [])
 
-    # Iterate and obtain the first 24 hours from the api weather request
+    # Iterate timeseries and obtain the first 24 hours from the Norway api request
     twentyfour_hour_data = []
     temp = {}
     for i in range(24):
@@ -129,10 +133,10 @@ def Weather(request):
         twentyfour_hour_data.append(data)
         data.update(temp)
 
-    # Iterate the entire 10 days (...obtaining times 00:00, 06:00, 12:00, 18:00) 
+    # Iterate timeseries 10 days (...obtaining times 00:00, 06:00, 12:00, 18:00) 
     ten_day_data = []
     temp_ = {}
-    for i in range(len(timeseries)):
+    for i in range(len(timeseries) - 1):
         data = timeseries[i].get('data')
         time = timeseries[i].get('time')
         getDate = datetime.datetime.strptime(time, '%Y-%m-%dT%H:%M:%SZ')
@@ -166,7 +170,6 @@ def Weather(request):
         'tenDay': {'tenDayData': ten_Day_Data_Grouped},
         'openWeather': {'openWeather' : openWeather}
     })
-
 
 
 

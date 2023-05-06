@@ -24,8 +24,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('api.urls')),
 
-    path('token/', jwt_views.TokenObtainPairView.as_view(), name ='token_obtain_pair'),
-    path('token/refresh/', jwt_views.TokenRefreshView.as_view(), name ='token_refresh'),
+    path('api/token/', jwt_views.TokenObtainPairView.as_view(), name ='token_obtain_pair'),
+    path('api/token/refresh/', jwt_views.TokenRefreshView.as_view(), name ='token_refresh'),
     path('api/users', CreateUserView.as_view(), name = 'user_registration'),
     path('api/cities/', CitySearchView.as_view(), name = 'cities'),
     path('api/favourites/', FavouriteView.as_view(), name = 'favourites'),

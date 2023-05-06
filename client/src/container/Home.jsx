@@ -26,6 +26,7 @@ const Home = () => {
       const searchBox = useRef();
 
       const localTime = GetLocalTime(date, openWeather.timezone);
+      const accessToken = localStorage.getItem('access_token')
 
       // get all city information
       useEffect(() => {
@@ -101,7 +102,8 @@ const Home = () => {
                         method: "POST",
                         headers: {
                               'Accept': 'application/json', 
-                              'Content-Type': 'application/json'
+                              'Content-Type': 'application/json',
+                              // 'Authorization': `Bearer ${accessToken}` // recently added
                         },
                         body: JSON.stringify({
                               latitude: latitude,
@@ -130,9 +132,8 @@ const Home = () => {
             // eslint-disable-next-line
       },[]);
 
-
+      // Get weather for all favourites  
       const handleFavourites = () => {
-            const accessToken = localStorage.getItem('access_token')
             fetch('/api/favourites/', {
                   headers: { 
                         'Content-Type': 'application/json',
@@ -140,8 +141,7 @@ const Home = () => {
                   },
             }).then(response => response.json())
             .then(data =>
-                  {     
-                        // Get weather for all favourites                        
+                  {                           
                         const getFavourites = data.map(async (data) => {
                               const coord = [
                                     data.lat, 
@@ -208,7 +208,7 @@ const Home = () => {
                         <Wiki></Wiki>
                   </ContainerWiki>
             </DashboardContainer>
-            <Footer>*Cities data from simplemaps.com/data/world-cities / Weather data from api.met.no and openweather.com</Footer>
+            <Footer>*Cities data from simplemaps.com/data/world-cities **Weather data from api.met.no and openweather.com</Footer>
 
             </>
       )
@@ -266,8 +266,16 @@ const ContainerWeather = styled.div`
 
 const Footer = styled.footer`
       text-align: center; 
-      font-size: 12px; 
+      font-size: 9px; 
       padding: 50px 0 15px 0;
+      margin: auto;
+      width: 1000px;
+      @media (max-width: 1020px) {
+            width: 500px;
+      }
+      @media (max-width: 568px) {
+            width: 350px;
+      }
 `
 
 

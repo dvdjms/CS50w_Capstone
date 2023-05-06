@@ -1,14 +1,15 @@
 import styled from 'styled-components';
 import React, { useState, useEffect } from 'react';
 
-const url = "http://127.0.0.1:8000/token/";
+const url = "http://127.0.0.1:8000/api/token/";
 
 const Login = () => {
-      const [isAuth, setIsAuth] = useState(false)
+      const [isAuth, setIsAuth] = useState(false);
+      const [loginFailed, setLoginFailed] = useState('');
 
       useEffect(() => {
             if (localStorage.getItem('access_token') !== null) {
-                  setIsAuth(true)
+                  setIsAuth(true);
             }
       },[isAuth]);
 
@@ -26,6 +27,7 @@ const Login = () => {
                         credentials: 'include',
                   })
                   if (!response.ok) {
+                        setLoginFailed('Check username and password!');
                         throw new Error('Login failed');
                   }
                   const data = await response.json();
@@ -35,7 +37,7 @@ const Login = () => {
                   window.location.href = "/";
             } catch(e){
                   console.log(e.message);
-            }
+            };
       };
 
       return (
@@ -53,7 +55,8 @@ const Login = () => {
                               <input className="form-control" id="password" name="password" placeholder="Password" required type="password"></input>
                         </FormChild>
                         <FormChild className="col-12">
-                              <button className="btn btn-primary" type="submit">Login</button>
+                              <Button className="btn btn-primary" type="submit">Login</Button>
+                              <Paragraph>{loginFailed}</Paragraph>
                         </FormChild>
                   </form>
             </FormContainer>
@@ -63,7 +66,7 @@ const Login = () => {
 };
 
 const H1 = styled.h1`
-      color: red;
+      color: #924242;
       text-align: center;
       margin-bottom: 5%;
       margin-top: 100px;
@@ -72,40 +75,48 @@ const H1 = styled.h1`
 const FormContainer = styled.div`
       margin: auto;
       width: 300px;
+      @media (max-width: 568px) {
+            width: 240px;
+      }
 `;
-
 
 const FormChild = styled.div`
-margin-bottom: 15px;
+      margin-bottom: 15px;
 `;
 
+const Button = styled.button`
+      float:left;
+      background-color:#ffffff;
+      border: solid #8e0a0a;
+      border-radius: 5px;
+      color: #8e0a0a;
+      font-size: 14px;
+      font-weight: 600;
+      height: 35px;
+      width: 70px;
+      &:hover {
+            background-color: #8e0a0a;
+            border: solid 1px #8e0a0a;
+            color: #ffffff;
+            cursor: pointer;
+      }
+      &:focus {
+            box-shadow: 1px 1px #ba4c4c;
+            outline: #8e0a0a;
+            border: solid 2px #8e0a0a;
+      }
+`;
+
+const Paragraph = styled.p`
+      color: red;
+      float:left;
+      padding: 25px 0 0 0px;
+      text-align: center;
+      width: 300px;
+      @media (max-width: 568px) {
+            width: 240px;
+      }
+`;
 
 
 export default Login;
-
-
-// const handleSubmit = async (e) => {
-//       e.preventDefault();
-//       const formData = {
-//             username: e.target.username.value,
-//             password: e.target.password.value,
-//       };
-
-//       await fetch(url, {
-//             method: "POST",
-//             headers: {'Content-Type': 'application/json'},
-//             body: JSON.stringify(formData),
-//             credentials: 'include',
-//       }).then((res) => res.json())
-//       .then((res) => {
-//             console.log('res', res)
-//             localStorage.clear();
-//             localStorage.setItem('access_token', res.access);
-//             localStorage.setItem('refresh_token', res.refresh);
-//       }).catch(err => console.log("err", err))
-      
-//       console.log("local", localStorage)
-     
-//       window.location.href = "/";
-
-// } 

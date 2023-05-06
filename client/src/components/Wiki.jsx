@@ -34,47 +34,90 @@ const Wiki = () => {
       return (
             <>
             <WikiContainer>
-                  <form onSubmit={handleSubmit} className="row g-3">
-                        <div className="col-md-12">
-                              <label className="form-label" hidden htmlFor="search">Search</label>
-                              <input name="search" type="text" className="form-control" id="search" placeholder="Search" required></input>
-                        </div> 
+                  <form onSubmit={handleSubmit} >
+                        <InputContainer >
+                              <label hidden htmlFor="search">Search Wikipedia</label>
+                              <Input name="search" type="text" id="search" placeholder="Search Wikipedia" required></Input>
+                        </InputContainer> 
 
-                        <div className="col-12">
-                              <button className="btn btn-primary" type="submit">Search</button>
-                        </div>
+                        <ButtonContainer className="col-12">
+                              <Button type="submit">Search</Button>
+                        </ButtonContainer>
                   </form>
 
-                  <div>
-                       <UL>
-                        {/* {wikiData.map((wikiData) => { 
-                              return <Li key={wikiData.data.id}><NewsItem>{wikiData.data.title}</NewsItem></Li>
-                        })}  */}
-                       </UL>
+                  <SearchResults>
                        <p>{wikiData}</p>
                        <img alt="" src={wikiImage} style={{width: "200px"}}></img>
-                  </div>
+                  </SearchResults>
             </WikiContainer>
             </>
       );
 
 };
 
+
+const InputContainer = styled.div`
+      float: left;
+      height: 37px;
+      width: 75%;
+`;
+
+const ButtonContainer = styled.div`
+      float: left;
+      height: 37px;
+      padding-top: 3px;
+      width: 25%;
+`;
+
+const Button = styled.button`
+      background-color:#f9dbdb;
+      border: solid #8e0a0a;
+      border-radius: 5px;
+      color: #8e0a0a;
+      font-size: 14px;
+      font-weight: 600;
+      height: 30px;
+      width: 80px;
+      &:hover {
+            background-color: #8e0a0a;
+            border: solid 1px #8e0a0a;
+            color: #f9dbdb;
+            cursor: pointer;
+      }
+      &:focus {
+            box-shadow: 1px 1px #ba4c4c;
+            outline: #8e0a0a;
+            border: solid 2px #8e0a0a;
+      }
+      @media (max-width: 568px) {
+            width: 60px;
+      }
+`;
+
+const SearchResults = styled.div`
+      margin-top: 45px;
+      padding: 7px; 
+`;
+
 const WikiContainer = styled.div`
       background-color: #f9dbdb;
       border: solid 2px goldenrod;
       border-radius: 10px;
       width: 500px;
-      padding: 7px;
+      padding: 10px;
       @media (max-width: 568px) {
             width: 350px;
       }
 `;
 
-const UL = styled.ul`
-      list-style: none;    
+const Input = styled.input`
+      border-radius: 4px;
+      border: solid 1px goldenrod;
+      margin-bottom: 10px;
+      padding-left: 7px;
+      min-width: 200px;
+      height: 35px;
+      width: 100%;
 `;
-
-
 
 export default Wiki;

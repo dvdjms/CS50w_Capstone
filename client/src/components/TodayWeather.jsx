@@ -87,7 +87,7 @@ const Span1 = styled.span`
 `;
 
 const TodayInnerContainer = styled.div`
-      background: linear-gradient(15deg,#f7f8c3 60%, #fffbab);
+      background: linear-gradient(15deg,#feffd3 60%, #faf8c8);
       box-shadow: 1px 1px 1.5px 1.5px #9d9f83;
       border-radius: 15px;
       height: 140px;
@@ -148,7 +148,7 @@ const TodayDetails = styled.div`
       width: 0;
       overflow-y: auto;
       @media (max-width: 568px) {
-            height: 15vh;
+            /* height: 15vh; */
             display: grid;
             grid-template-columns: repeat(1, 1fr);
             grid-template-rows: repeat(10, auto);
