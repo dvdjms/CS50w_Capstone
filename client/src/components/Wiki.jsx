@@ -30,7 +30,6 @@ const Wiki = () => {
             .catch(err => console.error(err))
       };
 
-
       return (
             <>
             <WikiContainer>
@@ -52,7 +51,6 @@ const Wiki = () => {
             </WikiContainer>
             </>
       );
-
 };
 
 

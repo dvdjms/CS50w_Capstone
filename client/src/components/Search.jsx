@@ -3,7 +3,6 @@ import styled from 'styled-components';
 
 const Search = (props) => {
 
-
       return (
             <>
             <SearchContainer>
@@ -28,8 +27,8 @@ const Search = (props) => {
                   </ListContainer>
             </SearchContainer>
             </>
-      )
-}
+      );
+};
 
 
 const SpanCity = styled.span`
@@ -91,6 +90,3 @@ const Li = styled.li`
 
 
 export default Search;
-
-
-

@@ -4,7 +4,6 @@ import { ConvertTime } from './helpers.js';
 
 const TodayWeather = (props) => {
       const expand = useRef();
-
       const oneDayData = props.oneDayData;
       const openWeather = props.openWeather;
       const tempNow = oneDayData.length > 0 ? parseInt(oneDayData[0].instant.details.air_temperature) : null;
@@ -30,7 +29,7 @@ const TodayWeather = (props) => {
                   expand.current.style.width = "60%";
                   expand.current.style.opacity = ".95";
             }
-      }
+      };
 
       return (
             <>
@@ -56,8 +55,8 @@ const TodayWeather = (props) => {
                   <Ellipsis onClick={handleOnClick}></Ellipsis>
             </TodayContainer>
             </>
-      )
-}
+      );
+};
 
 const Ellipsis = styled.div`
       margin-top: 10%;
@@ -107,6 +106,9 @@ const WeatherIcon = styled.img`
       float: left;
       text-align: right;
       z-index: 3;
+      @media (max-width: 568px) {
+            margin: 27px 23px 0 20px;
+      }
 `;
 
 const TodayMax = styled.div`
@@ -115,18 +117,23 @@ const TodayMax = styled.div`
       padding-top: 32px;
       text-align: right;
       width: 15%;
+      @media (max-width: 568px) {
+            font-size: 38px;
+      }
 `;
 
 const TodayFeelsLike = styled.div`
       float: left;
       font-size: 18px;
       padding-top: 59px;
-      padding-left: 10px;
+      padding-left: 15px;
       text-align: left;
       width: 35%;
       @media (max-width: 568px) {
-            width: 30%;
             font-size: 12px;
+            padding-left: 18px;
+            padding-top: 61px;
+            width: 35%;
       }
 `;
 
@@ -148,7 +155,6 @@ const TodayDetails = styled.div`
       width: 0;
       overflow-y: auto;
       @media (max-width: 568px) {
-            /* height: 15vh; */
             display: grid;
             grid-template-columns: repeat(1, 1fr);
             grid-template-rows: repeat(10, auto);

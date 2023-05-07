@@ -17,7 +17,7 @@ const Weather = (props) => {
       const handleMyLocation = () => {
             favourites(() => {
                   props.handleFavourites();
-            })
+            });
       };
 
       const favourites = (callback) => {
@@ -166,6 +166,3 @@ const DateContainer = styled.div`
 
 
 export default Weather;
-
-
-

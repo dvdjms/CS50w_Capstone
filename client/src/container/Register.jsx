@@ -36,9 +36,7 @@ const Register = () => {
             } catch(e){
                   console.log(e.message);
             };
-
       };
-
 
       return (
             <>
@@ -73,12 +71,10 @@ const Register = () => {
                               <Button className="btn btn-primary" type="submit">Register</Button>
                               <Paragraph>{usernameExists}</Paragraph>
                         </FormChild>
-
                   </form>
             </FormContainer>
             </>
       );
-
 };
 
 

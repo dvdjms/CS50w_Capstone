@@ -5,7 +5,6 @@ import Login from "./container/Login";
 import Register from "./container/Register";
 import NavBar from "./components/NavBar";
 import Logout from "./container/Logout";
-// import './interceptors/intercept';
 
 
 function App() {
@@ -47,7 +46,6 @@ function App() {
           // eslint-disable-next-line
           return Math.floor((new Date).getTime()) / 1000 >= expiry;
     };
-
 
   return (
     <div className="App">

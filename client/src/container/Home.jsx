@@ -6,7 +6,6 @@ import Search from '../components/Search';
 import MyLocations from '../components/MyLocations';
 import { favouritesWeather, GetLocalTime } from '../components/helpers.js';
 
-// * Times are UTC+0:00 / Cities data from simplemaps.com / Weather data from Meteorologisk Institutt, Norway
 
 const Home = () => {
       const [searchData, setSearchData] = useState([]);
@@ -94,7 +93,6 @@ const Home = () => {
             .catch(err => console.error(err));
       };
 
-
       // get all weather information
       useEffect(() => {
             const fetchData = () => {
@@ -103,7 +101,6 @@ const Home = () => {
                         headers: {
                               'Accept': 'application/json', 
                               'Content-Type': 'application/json',
-                              // 'Authorization': `Bearer ${accessToken}` // recently added
                         },
                         body: JSON.stringify({
                               latitude: latitude,
@@ -120,7 +117,7 @@ const Home = () => {
             }
             fetchData();
 
-            const timer = setInterval(() => setDate(new Date()), 60000);
+            const timer = setInterval(() => setDate(new Date()), 1000);
             return function cleanup() {
                   clearInterval(timer);
             }
@@ -209,10 +206,9 @@ const Home = () => {
                   </ContainerWiki>
             </DashboardContainer>
             <Footer>*Cities data from simplemaps.com/data/world-cities **Weather data from api.met.no and openweather.com</Footer>
-
             </>
-      )
-}
+      );
+};
 
 
 const DashboardContainer = styled.div`
@@ -276,7 +272,7 @@ const Footer = styled.footer`
       @media (max-width: 568px) {
             width: 350px;
       }
-`
+`;
 
 
 export default Home;

@@ -11,5 +11,6 @@ class CityAdmin(admin.ModelAdmin):
 class FavouriteAdmin(admin.ModelAdmin):
     list_display = ('username', 'city_ascii', 'timezone', 'cityid')
 
+
 admin.site.register(City, CityAdmin)
 admin.site.register(Favourite, FavouriteAdmin)

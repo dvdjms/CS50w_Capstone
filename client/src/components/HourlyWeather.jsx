@@ -4,7 +4,6 @@ import { GetLocalHours } from '../components/helpers.js';
 
 const HourlyWeather = (props) => {
 
-
       return (
             <HourlyContainer>
                   <Paragraph>24 hour forecast</Paragraph>
@@ -22,8 +21,8 @@ const HourlyWeather = (props) => {
                         })} 
                   </UL>
             </HourlyContainer>
-      )
-}
+      );
+};
 
 const HourlyContainer = styled.section`
       height: 120px;

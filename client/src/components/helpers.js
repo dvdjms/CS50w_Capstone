@@ -44,6 +44,7 @@ const ConvertStringTimezone = (stringDate, timezone) => {
 }
 
 
+// this was not implemented but on the todo list if the project is expanded
 const ConvertTemperature = (unit, temperature) => {
       if (unit === 'celcius') {
             const result = (temperature * 9 / 5) + 32;
@@ -84,4 +85,3 @@ const favouritesWeather = async (latitude, longitude, city_ascii, timezone, city
 
 
 export { ConvertTime, ConvertTemperature, favouritesWeather, GetLocalTime, GetLocalHours, GetLocalDay, ConvertStringTimezone};
-

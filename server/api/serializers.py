@@ -15,15 +15,6 @@ class FavouriteSerializer(serializers.ModelSerializer):
 
 
 class UserSerializer(serializers.ModelSerializer):
-
-    # def validate_username(self, value):
-    #     ModelClass = self.Meta.model
-    #     if User.objects.filter(username=value).exists():
-    #         print('already exists')
-    #         raise serializers.ValidationError('already exists')
-    #     print('continue')
-    #     return value
-
     class Meta:
         model = User
         fields = ['id', 'username', 'first_name', 'last_name', 'email', 'password']

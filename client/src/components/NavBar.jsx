@@ -11,7 +11,6 @@ const NavBar = () => {
             }
       },[isAuth]);
 
-
       return (
             <>
             <NavBarContainer>
@@ -26,9 +25,8 @@ const NavBar = () => {
                   </UL>}
             </NavBarContainer>
             </>
-      )
-}
-
+      );
+};
 
 
 const NavBarContainer = styled.div`
@@ -109,5 +107,6 @@ const NavLink = styled(Link)`
             color: #424a92;
       }
 `;
+
 
 export default NavBar;

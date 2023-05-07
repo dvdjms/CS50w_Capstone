@@ -113,7 +113,6 @@ const DailyWeather = (props) => {
                         </DaysInnerContainer>
                   </DaysOuterContainer>
 
-
                   {activeDay === 'day1' && 
                         <WeatherIconOuterContainer>
                               <WeatherIconInnerContainer>

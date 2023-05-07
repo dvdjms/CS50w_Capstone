@@ -1,7 +1,6 @@
 from django.db import models
 
 
-
 # source: https://simplemaps.com/data/world-cities 
 class City(models.Model):
     city = models.CharField(max_length=32, blank=False)

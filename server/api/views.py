@@ -19,11 +19,6 @@ class CreateUserView(generics.CreateAPIView):
     serializer_class = UserSerializer
     queryset = User.objects.all()
 
-    def checkUsername(self, request):
-        username = request.data.get(request.formData.username)
-        print('username', username)
-        return
-
 
 # Returns top 17 city objects based on user (search) input 
 class CitySearchView(generics.ListAPIView):
@@ -90,7 +85,6 @@ class LogoutView(APIView):
             return Response(status=status.HTTP_205_RESET_CONTENT)
         except Exception as e:
             return Response(status=status.HTTP_400_BAD_REQUEST)
-
 
 
 @csrf_exempt
